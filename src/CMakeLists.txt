@@ -1,0 +1,16 @@
+set(HACK_SOURCES MainEntry.cpp)
+
+set(HACK_HEADERS)
+
+add_library(ProjectPaste SHARED ${HACK_SOURCES})
+target_compile_definitions(ProjectPaste PRIVATE WIN32_LEAN_AND_MEAN)
+
+set_target_properties(ProjectPaste PROPERTIES
+	C_STANDARD 11
+	C_STANDARD_REQUIRED YES
+	CXX_STANDARD 17
+	CXX_STANDARD_REQUIRED YES
+	FOLDER HACK
+)
+
+install(TARGETS ProjectPaste RUNTIME DESTINATION bin ARCHIVE DESTINATION lib)
