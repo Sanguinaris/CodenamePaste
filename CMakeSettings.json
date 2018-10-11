@@ -15,11 +15,15 @@
       "variables": [
         {
           "name": "CMAKE_CXX_COMPILER",
-          "value": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.15.26726/bin/Hostx86/x86/cl.exe"
+          "value": "C:/Program Files (x86)/LLVM/bin/clang-cl.exe"
         },
         {
           "name": "CMAKE_C_COMPILER",
-          "value": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.15.26726/bin/Hostx86/x86/cl.exe"
+          "value": "C:/Program Files (x86)/LLVM/bin/clang-cl.exe"
+        },
+        {
+          "name": "ENABLE_TESTING",
+          "value": "ON"
         }
       ]
     }
