@@ -1,6 +1,6 @@
 set(TEST_SOURCES
 	TestMainFile.cpp
-	TestInterfaceManager.cpp)
+	TestVMTManager.cpp)
 
 add_executable(CTRLV ${TEST_SOURCES})
 add_dependencies(CTRLV catch)
