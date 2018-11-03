@@ -1,9 +1,17 @@
 #pragma once
+#include <memory>
 
+namespace CodeNamePaste {
+namespace Utils {
 class Vector {
  public:
-  float x = 0.f, y = 0.f, z = 0.f;
+  Vector(float* vecPtr);
 
+  Vector(float x = 0.f, float y = 0.f, float z = 0.f);
+
+  Vector(Vector&&) = default;
+
+ public:
   float operator[](int idx) const;
 
   float& operator[](int idx);
@@ -19,4 +27,22 @@ class Vector {
   Vector operator-(const Vector& otherVec) const;
 
   Vector operator+(const Vector& otherVec) const;
+
+  Vector& operator=(Vector&& otherVec) {
+    vec = std::move(otherVec.vec);
+    x = vec[0];
+    y = vec[1];
+    z = vec[2];
+    return *this;
+  };
+
+ private:
+  std::unique_ptr<float[]> vec;
+
+ public:
+  std::reference_wrapper<float> x;
+  std::reference_wrapper<float> y;
+  std::reference_wrapper<float> z;
 };
+}  // namespace Utils
+}  // namespace CodeNamePaste
