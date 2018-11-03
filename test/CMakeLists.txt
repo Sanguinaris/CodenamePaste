@@ -1,6 +1,7 @@
 set(TEST_SOURCES
 	TestMainFile.cpp
-	TestVMTManager.cpp)
+	TestVMTManager.cpp ../include/Utils/VMTManager.h
+	TestVector.cpp ../include/Utils/Vector.h ../src/Utils/Vector.cpp)
 
 add_executable(CTRLV ${TEST_SOURCES})
 add_dependencies(CTRLV catch)
