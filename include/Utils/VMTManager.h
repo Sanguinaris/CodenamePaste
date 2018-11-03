@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <cstdlib>
 
+namespace CodeNamePaste {
+namespace Utils {
 template <typename T>
 class VMTManager {
  public:
@@ -70,3 +72,5 @@ class VMTManager {
 
   std::unique_ptr<uint32_t*[]> pVmtCopy;
 };
+}  // namespace Utils
+}  // namespace CodeNamePaste

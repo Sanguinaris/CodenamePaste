@@ -2,32 +2,24 @@
 #include <stdexcept>
 #include <type_traits>
 
+using namespace CodeNamePaste;
+using namespace Utils;
+
+Vector::Vector(float* vec) : vec{vec}, x{vec[0]}, y{vec[1]}, z{vec[2]} {}
+
+Vector::Vector(float vecX, float vecY, float vecZ)
+    : vec{std::make_unique<float[]>(3)}, x{vec[0]}, y{vec[1]}, z{vec[2]} {
+  vec[0] = vecX;
+  vec[1] = vecY;
+  vec[2] = vecZ;
+}
+
 float Vector::operator[](int idx) const {
-  static_assert(std::is_standard_layout<Vector>::value,
-                "Vector is not standard layout, will fuck up everything");
-  switch (idx) {
-    case 0:
-      return x;
-    case 1:
-      return y;
-    case 2:
-      return z;
-    default:
-      throw std::logic_error{"Vector - Index out of bounds"};
-  }
+  return vec[idx];
 }
 
 float& Vector::operator[](int idx) {
-  switch (idx) {
-    case 0:
-      return x;
-    case 1:
-      return y;
-    case 2:
-      return z;
-    default:
-      throw std::logic_error{"Vector - Index out of bounds"};
-  }
+  return vec[idx];
 }
 
 bool Vector::operator==(const Vector& otherVec) const {
