@@ -5,6 +5,9 @@
 // THESE TESTS MIGHT FAIL UNDER CERTAIN COMPILERS/ARCHITECTURE.
 // PLEASE CREATE AN ISSUE IF THEY DO
 
+using namespace CodeNamePaste;
+using namespace Utils;
+
 class IExample {
  public:
   virtual ~IExample() = default;  // 0

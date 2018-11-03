@@ -1,6 +1,17 @@
 #include <catch.hpp>
 #include "Utils/Vector.h"
 
+using namespace CodeNamePaste;
+using namespace Utils;
+
+float* GimmeAVec() {
+  float* fl = new float[3];
+  fl[0] = 1.f;
+  fl[1] = 1.f;
+  fl[2] = 1.f;
+  return fl;
+}
+
 TEST_CASE("Can Access Parameters") {
   const Vector vec{};
   const Vector vec2{1.f, 2.f, 3.f};
@@ -25,6 +36,20 @@ TEST_CASE("Can Access Parameters and modify em") {
   CHECK(vec[0] == 1.f);
   CHECK(vec[1] == 2.f);
   CHECK(vec[2] == 3.f);
+}
+
+TEST_CASE("Can Access Parameters and modify em via x y and z") {
+  Vector vec{};
+
+  CHECK(vec.x == 0.f);
+  CHECK(vec.y == 0.f);
+  CHECK(vec.z == 0.f);
+  vec.x.get() = 1.f;
+  vec.y.get() = 2.f;
+  vec.z.get() = 3.f;
+  CHECK(vec.x == 1.f);
+  CHECK(vec.y == 2.f);
+  CHECK(vec.z == 3.f);
 }
 
 TEST_CASE("Vector can compare itself") {
@@ -57,4 +82,12 @@ TEST_CASE("Vector can subtract stuff") {
   CHECK(vec == vec2);
   vec = vec - vec;
   CHECK(vec == Vector{});
+}
+
+TEST_CASE("Vector works with External Vector") {
+  Vector myVec = GimmeAVec();
+
+  CHECK(myVec.x == Approx(1.f));
+  CHECK(myVec.y == Approx(1.f));
+  CHECK(myVec.z == Approx(1.f));
 }
