@@ -31,67 +31,15 @@ struct Example2 : IExample2 {
   int DoTwo() override { return 2; }
 };
 
-struct Example3 : public IExample, IExample2 {
-  bool DoTest() override { return false; }
 
-  int DoOne() override { return 1; }
-
-  int DoTwo() override { return 2; }
-};
-
-#ifdef _WIN32
-bool __fastcall hkDoTest(Example* ecx, void*) {
-  return true;
-}
-#else
 bool hkDoTest() {
   return true;
 }
-#endif
-
-TEST_CASE("We are capable of detecting the size of a VTable") {
-  GIVEN("An example Class") {
-    std::unique_ptr<Example> xmpl{std::make_unique<Example>()};
-    std::unique_ptr<Example2> xmpl2{std::make_unique<Example2>()};
-    std::unique_ptr<Example3> xmpl3{std::make_unique<Example3>()};
-
-    WHEN("Calculating the Size of the Vtable") {
-      // The VTable Size
-      uint32_t iVtableSize = 0;
-      uint32_t iVtableSize2 = 0;
-      uint32_t iVtableSize3 = 0;
-      uint32_t iVtableSize4 = 0;
-      // Iterate over the base object and check for nullptr
-      for (auto idx = *reinterpret_cast<uint32_t***>(xmpl.get());
-           idx[iVtableSize]; ++iVtableSize)
-        ;
-      for (auto idx = *reinterpret_cast<uint32_t***>(xmpl2.get());
-           idx[iVtableSize2]; ++iVtableSize2)
-        ;
-      for (auto idx = *reinterpret_cast<uint32_t***>(xmpl3.get());
-           idx[iVtableSize3]; ++iVtableSize3)
-        ;
-      for (auto idx =
-               *reinterpret_cast<uint32_t***>(xmpl3.get()) + sizeof(void*);
-           idx[iVtableSize4]; ++iVtableSize4)
-        ;
-
-      THEN("The Size should be correct") {
-#ifdef _MSC_VER
-        CHECK(iVtableSize == 2);
-        CHECK(iVtableSize2 == 3);
-#elif __clang__ && !defined(__OPTIMIZE__)
-        CHECK(iVtableSize == 8);
-        CHECK(iVtableSize2 == 9);
-#else
-        CHECK(iVtableSize == 3);
-        CHECK(iVtableSize2 == 4);
-#endif
-        // CHECK(iVtableSize3 == 2); // Different compilers do different stuff
-        // need to check CHECK(iVtableSize4 == 3);
-      }
-    }
-  }
+int hkDoOne() {
+    return 0;
+}
+int hkDoTwo() {
+ return 0;   
 }
 
 TEST_CASE("Test is capable of hooking the base function") {
@@ -114,6 +62,32 @@ TEST_CASE("Test is capable of hooking the base function") {
           "After the Manager Deconstructed we should be calling the original "
           "again") {
         REQUIRE_FALSE(xmpl->DoTest());
+      }
+    }
+  }
+  GIVEN("An Example2 Class") {
+    std::unique_ptr<Example2> xmpl{std::make_unique<Example2>()};
+      WHEN("The unhooked Function returns value as expected") {
+      REQUIRE(xmpl->DoOne() == 1);
+      REQUIRE(xmpl->DoTwo() == 2);
+
+      THEN("Automatically hooking it will change that") {
+        VMTManager<IExample2> mgr{xmpl.get()};
+#ifdef _MSC_VER
+        REQUIRE(mgr.HookIndex(1, &hkDoOne));
+        REQUIRE(mgr.HookIndex(2, &hkDoTwo));
+#else
+        REQUIRE(mgr.HookIndex(2, &hkDoOne));
+        REQUIRE(mgr.HookIndex(3, &hkDoTwo));
+#endif
+      REQUIRE(xmpl->DoOne() == 0);
+      REQUIRE(xmpl->DoTwo() == 0);
+      }
+      AND_THEN(
+          "After the Manager Deconstructed we should be calling the original "
+          "again") {
+      REQUIRE(xmpl->DoOne() == 1);
+      REQUIRE(xmpl->DoTwo() == 2);
       }
     }
   }
@@ -140,6 +114,25 @@ TEST_CASE("Test is capable of unhooking a function") {
 #else
         REQUIRE(mgr.UnHookIndex(2));
 #endif
+        REQUIRE_FALSE(xmpl->DoTest());
+      }
+    }
+  }
+}
+
+TEST_CASE("Test is not capable of hooking and unhooking a function that is not present") {
+  GIVEN("We've got a base Example Class and Vtable Manager") {
+    std::unique_ptr<Example> xmpl{std::make_unique<Example>()};
+    VMTManager<IExample> mgr{xmpl.get()};
+
+    REQUIRE_FALSE(xmpl->DoTest());
+
+    WHEN("When we hook the function") {
+      REQUIRE_FALSE(mgr.HookIndex(1337, &hkDoTest));
+      REQUIRE_FALSE(xmpl->DoTest());
+
+      THEN("Then if we unhook it, we get the original result") {
+        REQUIRE_FALSE(mgr.UnHookIndex(1337));
         REQUIRE_FALSE(xmpl->DoTest());
       }
     }
