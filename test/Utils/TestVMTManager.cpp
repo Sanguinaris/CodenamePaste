@@ -39,9 +39,15 @@ struct Example3 : public IExample, IExample2 {
   int DoTwo() override { return 2; }
 };
 
+#ifdef _WIN32
 bool __fastcall hkDoTest(Example* ecx, void*) {
   return true;
 }
+#else
+bool hkDoTest() {
+  return true;
+}
+#endif
 
 TEST_CASE("We are capable of detecting the size of a VTable") {
   GIVEN("An example Class") {
@@ -74,6 +80,9 @@ TEST_CASE("We are capable of detecting the size of a VTable") {
 #ifdef _MSC_VER
         CHECK(iVtableSize == 2);
         CHECK(iVtableSize2 == 3);
+#elif __clang__ && !defined(__OPTIMIZE__)
+        CHECK(iVtableSize == 8);
+        CHECK(iVtableSize2 == 9);
 #else
         CHECK(iVtableSize == 3);
         CHECK(iVtableSize2 == 4);
