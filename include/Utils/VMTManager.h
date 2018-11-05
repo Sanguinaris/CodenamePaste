@@ -1,6 +1,8 @@
 #pragma once
 
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 #include <cstdlib>
 
 namespace CodeNamePaste {
@@ -19,27 +21,37 @@ class VMTManager {
 
     std::copy(*_pBaseClass, *_pBaseClass + iVtableSize, pVmtCopy.get());
 
+#ifdef _WIN32
     DWORD dwOldProt;
     DWORD dwOldProt2;
     // Make ptr to vtable writeable
     VirtualProtect(_pBaseClass, sizeof(T*), PAGE_EXECUTE_READWRITE, &dwOldProt);
     // mark dtor with same access rights as prev
     VirtualProtect(pVmtCopy.get(), sizeof(T*), dwOldProt, &dwOldProt2);
+#endif
     // Replace the Vtable
     *_pBaseClass = pVmtCopy.get();
 
+#ifdef _WIN32
     // Restore page rights
     VirtualProtect(_pBaseClass, sizeof(T*), dwOldProt, &dwOldProt);
+#endif
   }
 
   ~VMTManager() {
+#ifdef _WIN32
     // Restore old vtable
     DWORD dwOldProt;
     VirtualProtect(pVmtCopy.get(), sizeof(T*), PAGE_EXECUTE_READWRITE,
                    &dwOldProt);
     VirtualProtect(_pBaseClass, sizeof(T*), PAGE_EXECUTE_READWRITE, &dwOldProt);
+#endif
+    
     *_pBaseClass = _pOrigVtable;
+    
+#ifdef _WIN32
     VirtualProtect(_pBaseClass, sizeof(T*), dwOldProt, &dwOldProt);
+#endif
   }
 
  public:
