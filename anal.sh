@@ -4,7 +4,7 @@ source /etc/profile
 
 llvm-profdata merge -sparse bld/CTRLV.profraw -o CTRLV.profdata
 llvm-cov show bld/test/CTRLV -instr-profile=CTRLV.profdata -format=html -output-dir=bld/cov
-llvm-cov export test/CTRLV -instr-profile=CTRLV.profdata > cov.json
+llvm-cov export bld/test/CTRLV -instr-profile=CTRLV.profdata > cov.json
 if [ ! -f bld/Coverify.jar ]; then 
     wget https://github.com/Olipro/Coverify/releases/download/v0.1.0/Coverify-1.0-SNAPSHOT.jar -O bld/Coverify.jar
 fi
