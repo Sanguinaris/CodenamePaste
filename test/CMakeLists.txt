@@ -16,5 +16,9 @@ set_target_properties(CTRLV PROPERTIES
 	FOLDER Test
 )
 
+add_test(
+    NAME CTRLV
+    COMMAND CTLRV -o report.xml -r junit)
+
 source_group("Unit Tests" REGULAR_EXPRESSION "/test/.*\\.cpp$")
 source_group("Header Files" REGULAR_EXPRESSION "/include/I[A-z]+\\.h")
