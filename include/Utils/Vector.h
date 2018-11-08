@@ -36,6 +36,9 @@ class Vector {
     return *this;
   };
 
+ public:
+  float Length2D() const;
+
  private:
   std::unique_ptr<float[]> vec;
 

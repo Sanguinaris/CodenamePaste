@@ -91,3 +91,14 @@ TEST_CASE("Vector works with External Vector") {
   CHECK(myVec.y == Approx(1.f));
   CHECK(myVec.z == Approx(1.f));
 }
+
+TEST_CASE("Vector can calcualte its 2D size") {
+  Vector myVec{0.f, 0.f, 0.f};
+  Vector myVec2{10.f, 10.f, -10.f};
+  Vector myVec3{-10.f, -10.f, 10.f};
+  Vector myVec4{1337.f, 69.f, 80085.f};
+  CHECK(myVec.Length2D() == 0.f);
+  CHECK(myVec2.Length2D() == Approx(14.142135623730951f));
+  CHECK(myVec3.Length2D() == Approx(14.142135623730951f));
+  CHECK(myVec4.Length2D() == Approx(1338.779294730838f));
+}
