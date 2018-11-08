@@ -1,11 +1,12 @@
 #include <catch.hpp>
 #include "Utils/Vector.h"
+#include "Utils/QAngle.h"
 
 using namespace CodeNamePaste;
 using namespace Utils;
 
 namespace Math {
-Vector CalcAngle(const Vector& src, const Vector& dst) {
+QAngle CalcAngle(const Vector& src, const Vector& dst) {
   return {};
 }
 }  // namespace Math
@@ -19,7 +20,7 @@ TEST_CASE(
     WHEN("Calculating the angles") {
       auto dstAngle = Math::CalcAngle(source, destination);
 
-      THEN("They should match") { CHECK(dstAngle == Vector{}); }
+      THEN("They should match") { CHECK(dstAngle == QAngle{}); }
     }
   }
 }

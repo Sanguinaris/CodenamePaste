@@ -12,7 +12,7 @@ float* GimmeAVec() {
   return fl;
 }
 
-TEST_CASE("Can Access Parameters") {
+TEST_CASE("Vector can Access Parameters") {
   const Vector vec{};
   const Vector vec2{1.f, 2.f, 3.f};
 
@@ -24,7 +24,7 @@ TEST_CASE("Can Access Parameters") {
   CHECK(vec2[2] == 3.f);
 }
 
-TEST_CASE("Can Access Parameters and modify em") {
+TEST_CASE("Vector can Access Parameters and modify em") {
   Vector vec{};
 
   CHECK(vec[0] == 0.f);
@@ -38,7 +38,7 @@ TEST_CASE("Can Access Parameters and modify em") {
   CHECK(vec[2] == 3.f);
 }
 
-TEST_CASE("Can Access Parameters and modify em via x y and z") {
+TEST_CASE("Vector can Access Parameters and modify em via x y and z") {
   Vector vec{};
 
   CHECK(vec.x == 0.f);

@@ -22,7 +22,7 @@ class QAngle {
 
   QAngle& operator+=(const QAngle& otherVec);
 
-  QAngle& operator-=(const Vector& otherVec);
+  QAngle& operator-=(const QAngle& otherVec);
 
   QAngle operator-(const QAngle& otherVec) const;
 
