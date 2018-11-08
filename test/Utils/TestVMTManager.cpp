@@ -31,15 +31,14 @@ struct Example2 : IExample2 {
   int DoTwo() override { return 2; }
 };
 
-
 bool hkDoTest() {
   return true;
 }
 int hkDoOne() {
-    return 0;
+  return 0;
 }
 int hkDoTwo() {
- return 0;   
+  return 0;
 }
 
 TEST_CASE("Test is capable of hooking the base function") {
@@ -67,7 +66,7 @@ TEST_CASE("Test is capable of hooking the base function") {
   }
   GIVEN("An Example2 Class") {
     std::unique_ptr<Example2> xmpl{std::make_unique<Example2>()};
-      WHEN("The unhooked Function returns value as expected") {
+    WHEN("The unhooked Function returns value as expected") {
       REQUIRE(xmpl->DoOne() == 1);
       REQUIRE(xmpl->DoTwo() == 2);
 
@@ -80,14 +79,14 @@ TEST_CASE("Test is capable of hooking the base function") {
         REQUIRE(mgr.HookIndex(2, &hkDoOne));
         REQUIRE(mgr.HookIndex(3, &hkDoTwo));
 #endif
-      REQUIRE(xmpl->DoOne() == 0);
-      REQUIRE(xmpl->DoTwo() == 0);
+        REQUIRE(xmpl->DoOne() == 0);
+        REQUIRE(xmpl->DoTwo() == 0);
       }
       AND_THEN(
           "After the Manager Deconstructed we should be calling the original "
           "again") {
-      REQUIRE(xmpl->DoOne() == 1);
-      REQUIRE(xmpl->DoTwo() == 2);
+        REQUIRE(xmpl->DoOne() == 1);
+        REQUIRE(xmpl->DoTwo() == 2);
       }
     }
   }
@@ -120,7 +119,9 @@ TEST_CASE("Test is capable of unhooking a function") {
   }
 }
 
-TEST_CASE("Test is not capable of hooking and unhooking a function that is not present") {
+TEST_CASE(
+    "Test is not capable of hooking and unhooking a function that is not "
+    "present") {
   GIVEN("We've got a base Example Class and Vtable Manager") {
     std::unique_ptr<Example> xmpl{std::make_unique<Example>()};
     VMTManager<IExample> mgr{xmpl.get()};
