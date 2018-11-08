@@ -53,8 +53,8 @@ QAngle QAngle::operator+(const QAngle& otherVec) const {
 }
 
 QAngle& QAngle::operator=(QAngle&& otherVec) {
-    vec = std::move(otherVec.vec);
-    x = vec[0];
-    y = vec[1];
-    return *this;
-  };
+  vec = std::move(otherVec.vec);
+  x = vec[0];
+  y = vec[1];
+  return *this;
+};

@@ -46,9 +46,9 @@ class VMTManager {
                    &dwOldProt);
     VirtualProtect(_pBaseClass, sizeof(T*), PAGE_EXECUTE_READWRITE, &dwOldProt);
 #endif
-    
+
     *_pBaseClass = _pOrigVtable;
-    
+
 #ifdef _WIN32
     VirtualProtect(_pBaseClass, sizeof(T*), dwOldProt, &dwOldProt);
 #endif

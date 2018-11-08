@@ -77,7 +77,6 @@ TEST_CASE("QAngle can subtract stuff") {
   QAngle vec{4.f, 8.f, 12.f};
   QAngle vec2{2.f, 4.f, 6.f};
 
-  
   CHECK((vec.x == 4.f && vec.y == 8.f && vec[2] == 12.f));
   vec -= vec2;
   CHECK(vec == vec2);

@@ -1,6 +1,6 @@
 #include <catch.hpp>
-#include "Utils/Vector.h"
 #include "Utils/QAngle.h"
+#include "Utils/Vector.h"
 
 using namespace CodeNamePaste;
 using namespace Utils;
