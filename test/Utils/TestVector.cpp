@@ -12,7 +12,7 @@ float* GimmeAVec() {
   return fl;
 }
 
-TEST_CASE("Can Access Parameters") {
+TEST_CASE("Vector can Access Parameters") {
   const Vector vec{};
   const Vector vec2{1.f, 2.f, 3.f};
 
@@ -24,7 +24,7 @@ TEST_CASE("Can Access Parameters") {
   CHECK(vec2[2] == 3.f);
 }
 
-TEST_CASE("Can Access Parameters and modify em") {
+TEST_CASE("Vector can Access Parameters and modify em") {
   Vector vec{};
 
   CHECK(vec[0] == 0.f);
@@ -38,7 +38,7 @@ TEST_CASE("Can Access Parameters and modify em") {
   CHECK(vec[2] == 3.f);
 }
 
-TEST_CASE("Can Access Parameters and modify em via x y and z") {
+TEST_CASE("Vector can Access Parameters and modify em via x y and z") {
   Vector vec{};
 
   CHECK(vec.x == 0.f);
@@ -90,4 +90,15 @@ TEST_CASE("Vector works with External Vector") {
   CHECK(myVec.x == Approx(1.f));
   CHECK(myVec.y == Approx(1.f));
   CHECK(myVec.z == Approx(1.f));
+}
+
+TEST_CASE("Vector can calcualte its 2D size") {
+  Vector myVec{0.f, 0.f, 0.f};
+  Vector myVec2{10.f, 10.f, -10.f};
+  Vector myVec3{-10.f, -10.f, 10.f};
+  Vector myVec4{1337.f, 69.f, 80085.f};
+  CHECK(myVec.Length2D() == 0.f);
+  CHECK(myVec2.Length2D() == Approx(14.142135623730951f));
+  CHECK(myVec3.Length2D() == Approx(14.142135623730951f));
+  CHECK(myVec4.Length2D() == Approx(1338.779294730838f));
 }

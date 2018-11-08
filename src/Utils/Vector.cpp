@@ -1,4 +1,5 @@
 #include "Utils/Vector.h"
+#include <cmath>
 #include <stdexcept>
 #include <type_traits>
 
@@ -50,4 +51,8 @@ Vector Vector::operator-(const Vector& otherVec) const {
 
 Vector Vector::operator+(const Vector& otherVec) const {
   return {x + otherVec.x, y + otherVec.y, z + otherVec.z};
+}
+
+float Vector::Length2D() const {
+  return sqrtf(x * x + y * y);
 }
