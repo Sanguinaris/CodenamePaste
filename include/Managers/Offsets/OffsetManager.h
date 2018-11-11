@@ -3,11 +3,13 @@
 #include <array>
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 
-#include <Psapi.h>
 #include <Windows.h>
+
+#include <Psapi.h>
 
 #include "Managers/IManager.h"
 
@@ -101,36 +103,23 @@ class OffsetManager : public IManager {
     return ret;
   }
 
-  static constexpr const bool CompareString(const char* str1,
-                                            const char* str2) {
-    int i = 0;
-    for (; str1[i] != '\0' && str2[i] != '\0'; ++i) {
-      if (str1[i] != str2[i])
-        return false;
-    }
-
-    if (str1[i] == '\0' && str2[i] == '\0')
-      return true;
-    return false;
-  }
-
   template <typename F>
-  static constexpr const OffsetNames GetEnumFromString_impl(F func) {
-    if (CompareString(func(), "EnginePointer"))
+  static constexpr const OffsetNames GetEnumFromString_impl(std::string_view name) {
+	  if (name == "EnginePointer")
       return OffsetNames::EnginePtr;
-    if (CompareString(func(), "GameResources"))
+	  if (name == "GameResources")
       return OffsetNames::GameRes;
-    if (CompareString(func(), "GlobalVars"))
+	  if (name == "GlobalVars")
       return OffsetNames::GlobalVars;
-    if (CompareString(func(), "ClientMode"))
+    if (name == "ClientMode")
       return OffsetNames::ClientMode;
     return OffsetNames::Size;
   }
 
   template <typename F>
   static constexpr const OffsetNames GetEnumFromString(F func) {
-    static_assert(GetEnumFromString_impl(func) != OffsetNames::Size);
-    return GetEnumFromString_impl(func);
+    static_assert(GetEnumFromString_impl(func()) != OffsetNames::Size);
+    return GetEnumFromString_impl(func());
   }
 
   template <typename F>

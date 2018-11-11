@@ -1,5 +1,7 @@
 #include <Windows.h>
 
+
+#include "Managers/Hooking/HookingManager.h"
 #include "Managers/Interfaces/InterfaceManager.h"
 #include "Managers/Offsets/OffsetManager.h"
 
@@ -21,21 +23,24 @@ bool ShouldRun = true;
 DWORD WINAPI OffloadThread(LPVOID) {
   Offsets::OffsetManager offsetMgr{};
   Interfaces::InterfaceManager ifaceMgr{};
+  Hooks::HookingManager hookMgr{};
 
   try {
     offsetMgr.DoInit();
     ifaceMgr.DoInit();
+    hookMgr.DoInit();
   } catch (const std::runtime_error& ex) {
     throw;
   }
-  FindPatternWrap(offsetMgr, int, "client.dll", "12 14 17 ?? 99");
 
   while (ShouldRun) {
     offsetMgr.DoTick();
     ifaceMgr.DoTick();
+    hookMgr.DoTick();
     std::this_thread::sleep_for(50ms);
   }
 
+  hookMgr.DoShutdown();
   ifaceMgr.DoShutdown();
   offsetMgr.DoShutdown();
 
