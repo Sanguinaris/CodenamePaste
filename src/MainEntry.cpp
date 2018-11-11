@@ -1,7 +1,7 @@
 #include <Windows.h>
 
-#include "Managers/Offsets/OffsetManager.h"
 #include "Managers/Interfaces/InterfaceManager.h"
+#include "Managers/Offsets/OffsetManager.h"
 
 #include <chrono>
 #include <thread>
@@ -24,7 +24,7 @@ DWORD WINAPI OffloadThread(LPVOID) {
 
   try {
     offsetMgr.DoInit();
-	ifaceMgr.DoInit();
+    ifaceMgr.DoInit();
   } catch (const std::runtime_error& ex) {
     throw;
   }
@@ -32,10 +32,10 @@ DWORD WINAPI OffloadThread(LPVOID) {
 
   while (ShouldRun) {
     offsetMgr.DoTick();
-	ifaceMgr.DoTick();
+    ifaceMgr.DoTick();
     std::this_thread::sleep_for(50ms);
   }
-  
+
   ifaceMgr.DoShutdown();
   offsetMgr.DoShutdown();
 

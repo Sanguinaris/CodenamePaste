@@ -6,8 +6,8 @@
 #include <type_traits>
 #include <utility>
 
-#include <Windows.h>
 #include <Psapi.h>
+#include <Windows.h>
 
 #include "Managers/IManager.h"
 
