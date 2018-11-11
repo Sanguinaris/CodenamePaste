@@ -6,8 +6,8 @@
 #include <type_traits>
 #include <utility>
 
-#include <Windows.h>
 #include <Psapi.h>
+#include <Windows.h>
 
 #include "Managers/IManager.h"
 
@@ -41,7 +41,6 @@ enum class OffsetNames : uint8_t {
 #define GetOffsetWrap(inst, name) inst.GetOffset([] { return name; })
 #define FindPatternWrap(inst, ret, mod, pattern) \
   inst.FindPattern<ret>(mod, [] { return pattern; })
-using AutoNum = std::conditional_t<(sizeof(void*) == 8), uint64_t, uint32_t>;
 
 class OffsetManager : public IManager {
  public:
@@ -63,7 +62,7 @@ class OffsetManager : public IManager {
 
     HMODULE hModule = GetModuleHandleA(mod.c_str());
 
-    if (hModule == INVALID_HANDLE_VALUE)
+    if (hModule == nullptr)
       return nullptr;
 
     MODULEINFO modInfo;
