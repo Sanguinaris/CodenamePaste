@@ -2,8 +2,8 @@
 
 #include "Managers/Offsets/OffsetManager.h"
 
-#include <thread>
 #include <chrono>
+#include <thread>
 #include <utility>
 
 using namespace std::chrono_literals;
@@ -18,39 +18,36 @@ using namespace Offsets;
 HANDLE threadHandle;
 bool ShouldRun = true;
 
-DWORD WINAPI OffloadThread(LPVOID)
-{
-	OffsetManager offsetMgr{};
+DWORD WINAPI OffloadThread(LPVOID) {
+  OffsetManager offsetMgr{};
 
-	try {
-		offsetMgr.DoInit();
-	}
-	catch (const std::runtime_error& ex)
-	{
-		throw;
-	}
-	FindPatternWrap(offsetMgr, int, "client.dll", "12 14 17 ?? 99");
+  try {
+    offsetMgr.DoInit();
+  } catch (const std::runtime_error& ex) {
+    throw;
+  }
+  FindPatternWrap(offsetMgr, int, "client.dll", "12 14 17 ?? 99");
 
-    while(ShouldRun)
-    {
-		offsetMgr.DoTick();
-        std::this_thread::sleep_for(50ms);
-    }
+  while (ShouldRun) {
+    offsetMgr.DoTick();
+    std::this_thread::sleep_for(50ms);
+  }
 
-	offsetMgr.DoShutdown();
-    
-    return TRUE;
+  offsetMgr.DoShutdown();
+
+  return TRUE;
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID) {
   switch (fdwReason) {
     case DLL_PROCESS_ATTACH:
       DisableThreadLibraryCalls(hinstDLL);
-      threadHandle = CreateThread(nullptr, 0, &OffloadThread, nullptr, 0, nullptr);
+      threadHandle =
+          CreateThread(nullptr, 0, &OffloadThread, nullptr, 0, nullptr);
       break;
     case DLL_PROCESS_DETACH:
-        ShouldRun = false;
-        WaitForSingleObject(threadHandle, 200);
+      ShouldRun = false;
+      WaitForSingleObject(threadHandle, 200);
       break;
   }
   return TRUE;
