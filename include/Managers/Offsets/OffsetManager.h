@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <array>
 #include <Windows.h>
 #include <Psapi.h>
 
@@ -22,6 +23,14 @@ struct PatternInfo
     unsigned char Mask[N];
 	constexpr explicit PatternInfo() : PatternSize{N}, Pattern {}, Mask{}
     {}
+};
+
+struct PatternSlice
+{
+	unsigned char cPattern;
+	bool bIgnore;
+
+	constexpr PatternSlice() : cPattern{}, bIgnore{ false } {}
 };
 
 enum class OffsetNames : uint8_t {
@@ -52,7 +61,6 @@ class OffsetManager : public IManager {
 
   template <typename ret, typename F>
   const ret* FindPattern(std::string&& mod, F func) {
-
 	  auto info = BuildPattern<GetPatternSize(func)>(func);
 
 	  
@@ -64,30 +72,36 @@ class OffsetManager : public IManager {
 	MODULEINFO modInfo;
 	GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
 
-    return FindPattern(reinterpret_cast<ret*>(modInfo.lpBaseOfDll), reinterpret_cast<ret*>(modInfo.lpBaseOfDll) + modInfo.SizeOfImage, info.Pattern, info.Mask, info.PatternSize);
+    return FindPattern(reinterpret_cast<ret*>(modInfo.lpBaseOfDll), reinterpret_cast<ret*>(modInfo.lpBaseOfDll) + modInfo.SizeOfImage, std::move(info));
   }
 
 private:
-
-	//TODO make vectored pattern build constexpr
-	template<typename ret>
-	ret* FindPattern(ret* start, ret* end, const unsigned char* lpPattern, const unsigned char* pszMask, unsigned int N)
+	template<typename ret, unsigned int N>
+	ret* FindPattern(ret* start, ret* end, PatternInfo<N>&& info)
 	{
-		
-		// Build vectored pattern.. 
-		std::vector<std::pair<unsigned char, bool>> pattern; 
-		for (size_t x = 0; x < N; ++x) 
-			pattern.push_back(std::make_pair(lpPattern[x], pszMask[x] == 'x'));
+		auto pattern = BuildArrPattern<N>(info.Pattern, info.Mask);
 
 		auto addy = std::search(start, end, pattern.begin(), pattern.end(), 
-            [&](unsigned char curr, std::pair<unsigned char, bool> currPattern) 
+            [&](unsigned char curr, const PatternSlice& currPattern) 
         { 
-            return (!currPattern.second) || curr == currPattern.first; 
+            return currPattern.bIgnore || curr == currPattern.cPattern; 
         });
 		return (addy != end) ? addy : 0;
 	}
 
  private:
+  template<unsigned int N>
+  static constexpr const std::array<PatternSlice, N> BuildArrPattern(const unsigned char* lpPattern, const unsigned char* pszMask)
+  {
+	  std::array<PatternSlice, N> ret{};
+	  for (auto i = 0; i < N; ++i)
+	  {
+		  ret[i].cPattern = lpPattern[i];
+		  ret[i].bIgnore = pszMask[i] == '?';
+	  }
+	  return ret;
+  }
+
   static constexpr const bool CompareString(const char* str1,
                                             const char* str2) {
     int i = 0;

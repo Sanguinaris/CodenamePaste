@@ -27,7 +27,7 @@ DWORD WINAPI OffloadThread(LPVOID)
 	}
 	catch (const std::runtime_error& ex)
 	{
-
+		throw;
 	}
 	FindPatternWrap(offsetMgr, int, "client.dll", "12 14 17 ?? 99");
 
