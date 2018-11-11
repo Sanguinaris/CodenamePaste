@@ -1,6 +1,11 @@
 #pragma once
+#include <type_traits>
+
 namespace CodeNamePaste {
 namespace Managers {
+
+using AutoNum = std::conditional_t<(sizeof(void*) == 8), uint64_t, uint32_t>;
+
 class IManager {
  public:
   virtual ~IManager() = default;

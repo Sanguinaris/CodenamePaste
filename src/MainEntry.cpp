@@ -1,6 +1,7 @@
 #include <Windows.h>
 
 #include "Managers/Offsets/OffsetManager.h"
+#include "Managers/Interfaces/InterfaceManager.h"
 
 #include <chrono>
 #include <thread>
@@ -13,16 +14,17 @@ using namespace std::chrono_literals;
 
 using namespace CodeNamePaste;
 using namespace Managers;
-using namespace Offsets;
 
 HANDLE threadHandle;
 bool ShouldRun = true;
 
 DWORD WINAPI OffloadThread(LPVOID) {
-  OffsetManager offsetMgr{};
+  Offsets::OffsetManager offsetMgr{};
+  Interfaces::InterfaceManager ifaceMgr{};
 
   try {
     offsetMgr.DoInit();
+	ifaceMgr.DoInit();
   } catch (const std::runtime_error& ex) {
     throw;
   }
@@ -30,9 +32,11 @@ DWORD WINAPI OffloadThread(LPVOID) {
 
   while (ShouldRun) {
     offsetMgr.DoTick();
+	ifaceMgr.DoTick();
     std::this_thread::sleep_for(50ms);
   }
-
+  
+  ifaceMgr.DoShutdown();
   offsetMgr.DoShutdown();
 
   return TRUE;
