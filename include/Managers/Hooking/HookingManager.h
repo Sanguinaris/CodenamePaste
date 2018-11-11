@@ -1,10 +1,13 @@
 #pragma once
 
 #include <unordered_map>
-#include <vector>
+#include <list>
 #include <string_view>
 #include <utility>
 #include <functional>
+#include <mutex>
+#include <shared_mutex>
+#include <algorithm>
 
 #include "Managers/IManager.h"
 
@@ -17,7 +20,8 @@ namespace CodeNamePaste {
 				Size
 			};
 
-#define RegisterCallbackWarp(inst, name, clbk) inst.RegisterCallback([]{return name;}, clbk)
+#define RegisterCallbackWrap(inst, name, clbk) inst.RegisterCallback([]{return name;}, clbk)
+#define UnRegisterCallbackWrap(inst, name, clbk) inst.UnRegisterCallback([]{return name;}, clbk)
 
 			class HookingManager : public IManager {
 			public:
@@ -31,28 +35,46 @@ namespace CodeNamePaste {
 			public:
 				// TODO make callback registering constexpr
 				template<typename F>
-				void RegisterCallback(F func, std::function<void(void*)>&& clbk)
+				const std::function<void(void*)>& RegisterCallback(F func, std::function<void(void*)>&& clbk)
 				{
-					funcCallbacks[GetEnumFromString(func)].emplace_back(std::move(clbk));
+					std::unique_lock<std::shared_mutex> lock{ mutex_ };
+					return funcCallbacks[GetEnumFromString(func)].emplace_back(std::move(clbk));
 				}
 
-				//template<typename F>
-				//void UnRegisterCallback(F func, )
+				template<typename F>
+				void UnRegisterCallback(F func, std::function<void(void*)>& ref)
+				{
+					std::unique_lock<std::shared_mutex> lock{ mutex_ };
+
+					auto table = GetEnumFromString(func);
+
+					auto curIdx = funcCallbacks[table].begin();
+					while ((curIdx = std::find_if(curIdx, funcCallbacks[table].end(), [&ref](const auto& func) {
+						return std::addressof(func) == std::addressof(ref);
+					})) != funcCallbacks[table].end())
+					{
+						curIdx = funcCallbacks[table].erase(curIdx);
+					}
+				}
 
 			private:
 				  static constexpr const HookNames GetEnumFromString_impl(std::string_view name) {
 					  if (name == "CreateMove")
 						 return HookNames::CreateMove;
+					  if (name == "OnTick")
+						  return HookNames::OnTick;
 					return HookNames::Size;
 				  }
 
 				  template <typename F>
-				  static constexpr const HookNames GetEnumFromString(F func) {
-					static_assert(GetEnumFromString_impl(func()) != HookNames::Size);
-					return GetEnumFromString_impl(func());
+				  static constexpr HookNames GetEnumFromString(F func) {
+					  constexpr auto internalName = GetEnumFromString_impl(func());
+					static_assert(internalName != HookNames::Size);
+					return internalName;
 				  }
 			private:
-				std::unordered_map<HookNames, std::vector<std::function<void(void*)>>> funcCallbacks{};
+				std::unordered_map<HookNames, std::list<std::function<void(void*)>>> funcCallbacks{};
+				std::shared_mutex mutex_;
 			};
 		}
 	}

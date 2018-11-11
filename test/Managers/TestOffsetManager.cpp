@@ -19,3 +19,14 @@ TEST_CASE("Test wether or not OffsetManager is capable of finding Signatures") {
   REQUIRE_FALSE(x == nullptr);
   CHECK(x == totallyCool);
 }
+
+#include "Managers/Hooking/HookingManager.h"
+
+TEST_CASE("DoSomething")
+{
+	Hooks::HookingManager hookMgr{};
+	auto token = RegisterCallbackWrap(hookMgr, "OnTick", [](void*) {MessageBoxW(nullptr, L"awd", L"wad", MB_OK); });
+	hookMgr.DoTick();
+	UnRegisterCallbackWrap(hookMgr, "OnTick", token);
+	hookMgr.DoTick();
+}

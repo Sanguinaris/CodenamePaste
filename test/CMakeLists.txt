@@ -6,7 +6,8 @@ set(TEST_SOURCES
 	Utils/TestQAngle.cpp ../include/Utils/QAngle.h ../src/Utils/QAngle.cpp)
 
 if(WIN32)
-	set(WIN_SOURCES Managers/TestOffsetManager.cpp ../include/Managers/Offsets/OffsetManager.h ../src/Managers/Offsets/OffsetManager.cpp)
+	set(WIN_SOURCES Managers/TestOffsetManager.cpp ../include/Managers/Offsets/OffsetManager.h ../src/Managers/Offsets/OffsetManager.cpp
+	../include/Managers/Hooking/HookingManager.h ../src/Managers/Hooking/HookingManager.cpp)
 endif()
 
 add_executable(CTRLV ${TEST_SOURCES} ${WIN_SOURCES})

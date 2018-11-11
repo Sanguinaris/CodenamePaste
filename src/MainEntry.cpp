@@ -29,7 +29,7 @@ DWORD WINAPI OffloadThread(LPVOID) {
     offsetMgr.DoInit();
     ifaceMgr.DoInit();
     hookMgr.DoInit();
-  } catch (const std::runtime_error& ex) {
+  } catch (const std::runtime_error&) {
     throw;
   }
 

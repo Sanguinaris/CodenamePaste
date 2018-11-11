@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 #include "Managers/IManager.h"
 
@@ -43,8 +44,9 @@ namespace CodeNamePaste {
 
 				  template <typename F>
 				  static constexpr const InterfaceNames GetEnumFromString(F func) {
-					static_assert(GetEnumFromString_impl(func) != InterfaceNames::Size);
-					return GetEnumFromString_impl(func);
+					  constexpr auto internalName = GetEnumFromString_impl(func());
+					static_assert(internalName != InterfaceNames::Size);
+					return internalName;
 				  }
 			private:
 				AutoNum* ifaceAddys[static_cast<uint8_t>(InterfaceNames::Size)] = { nullptr };

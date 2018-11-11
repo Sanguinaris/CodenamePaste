@@ -6,6 +6,7 @@ using namespace Hooks;
 
 void HookingManager::DoInit() {}
 void HookingManager::DoTick() {
+	std::shared_lock<std::shared_mutex> lock{ mutex_ };
 	for (const auto& clbk : funcCallbacks[HookNames::OnTick])
 	{
 		clbk(nullptr);
