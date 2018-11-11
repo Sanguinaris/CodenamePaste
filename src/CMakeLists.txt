@@ -13,6 +13,7 @@ set(HACK_HEADERS ../include/Utils/MathHelper.h
 
 add_library(ProjectPaste SHARED ${HACK_SOURCES})
 target_compile_definitions(ProjectPaste PRIVATE WIN32_LEAN_AND_MEAN)
+target_link_libraries(ProjectPaste psapi)
 
 set_target_properties(ProjectPaste PROPERTIES
 	C_STANDARD 11

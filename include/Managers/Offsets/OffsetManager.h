@@ -1,12 +1,28 @@
 #pragma once
 #include <cstdint>
 #include <type_traits>
+#include <utility>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <Windows.h>
+#include <Psapi.h>
 
 #include "Managers/IManager.h"
 
 namespace CodeNamePaste {
 namespace Managers {
 namespace Offsets {
+
+template<unsigned int N>
+struct PatternInfo
+{
+	unsigned int PatternSize;
+    unsigned char Pattern[N];
+    unsigned char Mask[N];
+	constexpr explicit PatternInfo() : PatternSize{N}, Pattern {}, Mask{}
+    {}
+};
 
 enum class OffsetNames : uint8_t {
   EnginePtr,
@@ -15,7 +31,9 @@ enum class OffsetNames : uint8_t {
   ClientMode,
   Size
 };
+
 #define GetOffsetWrap(inst, name) inst.GetOffset([] { return name; })
+#define FindPatternWrap(inst, ret, mod, pattern) inst.FindPattern<ret>(mod, [] { return pattern; })
 using AutoNum = std::conditional_t<(sizeof(void*) == 8), uint64_t, uint32_t>;
 
 class OffsetManager : public IManager {
@@ -32,10 +50,42 @@ class OffsetManager : public IManager {
     return addrOffsets[static_cast<uint8_t>(GetEnumFromString(func))];
   }
 
-  template <typename F>
-  const AutoNum FindPattern(F func) {
-    return {};
+  template <typename ret, typename F>
+  const ret* FindPattern(std::string&& mod, F func) {
+
+	  auto info = BuildPattern<GetPatternSize(func)>(func);
+
+	  
+	HMODULE hModule = GetModuleHandleA(mod.c_str());
+	
+	if (hModule == INVALID_HANDLE_VALUE)
+		return nullptr;
+	
+	MODULEINFO modInfo;
+	GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
+
+    return FindPattern(reinterpret_cast<ret*>(modInfo.lpBaseOfDll), reinterpret_cast<ret*>(modInfo.lpBaseOfDll) + modInfo.SizeOfImage, info.Pattern, info.Mask, info.PatternSize);
   }
+
+private:
+
+	//TODO make vectored pattern build constexpr
+	template<typename ret>
+	ret* FindPattern(ret* start, ret* end, const unsigned char* lpPattern, const unsigned char* pszMask, unsigned int N)
+	{
+		
+		// Build vectored pattern.. 
+		std::vector<std::pair<unsigned char, bool>> pattern; 
+		for (size_t x = 0; x < N; ++x) 
+			pattern.push_back(std::make_pair(lpPattern[x], pszMask[x] == 'x'));
+
+		auto addy = std::search(start, end, pattern.begin(), pattern.end(), 
+            [&](unsigned char curr, std::pair<unsigned char, bool> currPattern) 
+        { 
+            return (!currPattern.second) || curr == currPattern.first; 
+        });
+		return (addy != end) ? addy : 0;
+	}
 
  private:
   static constexpr const bool CompareString(const char* str1,
@@ -68,6 +118,61 @@ class OffsetManager : public IManager {
   static constexpr const OffsetNames GetEnumFromString(F func) {
     static_assert(GetEnumFromString_impl(func) != OffsetNames::Size);
     return GetEnumFromString_impl(func);
+  }
+
+
+  template <typename F>
+  static constexpr int GetPatternSize(F func)
+  {
+	  auto name = func();
+	  int ret = 1;
+	  for (auto i = 0; name[i] != '\0'; ++i)
+	  {
+		  if (name[i] == ' ')
+			  ++ret;
+	  }
+	  return ret;
+  }
+
+  template <int L, typename F>
+  static constexpr const PatternInfo<L> BuildPattern(F func)
+  {
+	  PatternInfo<L> info{};
+
+	  auto idaSig = func();
+
+	  unsigned char tmpChar = 0;
+	  auto curSigIdx = 0;
+	  auto i = 0;
+	  for (; idaSig[i] != '\0'; ++i)
+	  {
+		  if (idaSig[i] == ' ' && idaSig[i - 1] != '?')
+		  {
+			  info.Pattern[curSigIdx] = tmpChar;
+			  info.Mask[curSigIdx] = 'x';
+
+			  tmpChar = 0;
+			  ++curSigIdx;
+		  }
+		  else if (idaSig[i] == '?' && idaSig[i + 1] != '?')
+		  {
+			info.Pattern[curSigIdx] = '\x00';
+			info.Mask[curSigIdx] = '?';
+			++curSigIdx;
+		  }
+		  else if (idaSig[i] != '?' && idaSig[i] != ' ')
+		  {
+			  tmpChar *= 16;
+			  tmpChar += (idaSig[i] >= 'a') ? idaSig[i] - ('a' + 10) : (idaSig[i] >= 'A') ? idaSig[i] - ('A' + 10) : idaSig[i] - '0';
+		  }
+	  }
+	  if (idaSig[i - 1] != '?')
+	  {
+		  info.Pattern[curSigIdx] = tmpChar;
+		  info.Mask[curSigIdx] = 'x';
+	  }
+
+	  return info;
   }
 
  private:
