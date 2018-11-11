@@ -2,12 +2,16 @@ set(TEST_SOURCES
 	TestMainFile.cpp
 	Utils/TestVMTManager.cpp ../include/Utils/VMTManager.h
 	Utils/TestVector.cpp ../include/Utils/Vector.h ../src/Utils/Vector.cpp
-	Utils/TestMathHelper.cpp
+	Utils/TestMathHelper.cpp ../include/Utils/MathHelper.h ../src/Utils/MathHelper.cpp
 	Utils/TestQAngle.cpp ../include/Utils/QAngle.h ../src/Utils/QAngle.cpp)
 
-add_executable(CTRLV ${TEST_SOURCES})
+if(WIN32)
+	set(WIN_SOURCES Managers/TestOffsetManager.cpp ../include/Managers/Offsets/OffsetManager.h ../src/Managers/Offsets/OffsetManager.cpp)
+endif()
+
+add_executable(CTRLV ${TEST_SOURCES} ${WIN_SOURCES})
 add_dependencies(CTRLV catch)
-#target_link_libraries
+
 set_target_properties(CTRLV PROPERTIES
 	C_STANDARD 11
 	C_STANDARD_REQUIRED YES

@@ -1,41 +1,9 @@
-#define _USE_MATH_DEFINES
-
 #include <catch.hpp>
 
-#include <cmath>
-#include "Utils/QAngle.h"
-#include "Utils/Vector.h"
+#include "Utils/MathHelper.h"
 
 using namespace CodeNamePaste;
 using namespace Utils;
-
-namespace Math {
-
-QAngle VectorAngles(const Vector& forward) {
-  QAngle retAngle{};
-
-  if (forward.y == 0 && forward.x == 0) {
-    if (forward.z > 0)
-      retAngle.x.get() = 270;
-    else
-      retAngle.x.get() = 90;
-  } else {
-    retAngle.x.get() = (atan2f(-forward.z, forward.Length2D()) * -180 / M_PI);
-    retAngle.y.get() = (atan2f(forward.y, forward.x) * 180 / M_PI);
-    if (retAngle.y < 90)
-      retAngle.y += 180;
-    else if (retAngle.y == 90)
-      retAngle.y.get() = 0;
-  }
-
-  return retAngle;
-}
-
-QAngle CalcAngle(const Vector& src, const Vector& dst) {
-  Vector delta = src - dst;
-  return VectorAngles(delta);
-}
-}  // namespace Math
 
 TEST_CASE(
     "MathHelper is capable of Calculating an Angle between two positions") {
