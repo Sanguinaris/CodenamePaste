@@ -4,6 +4,9 @@
 #include "Managers/Hooking/HookingManager.h"
 #include "Managers/Interfaces/InterfaceManager.h"
 #include "Managers/Offsets/OffsetManager.h"
+#include "Managers/Modules/ModuleManager.h"
+
+#include "Managers/Modules/Module.h"
 
 #include <chrono>
 #include <thread>
@@ -24,19 +27,25 @@ DWORD WINAPI OffloadThread(LPVOID) {
   Offsets::OffsetManager offsetMgr{};
   Interfaces::InterfaceManager ifaceMgr{};
   Hooks::HookingManager hookMgr{};
+  Modules::ModuleManager modMgr{};
+
+  modMgr.RegisterModule(std::make_unique<Modules::Module>("Module"));
 
     offsetMgr.DoInit();
     ifaceMgr.DoInit();
     hookMgr.DoInit();
+	modMgr.DoInit();
 
 
   while (ShouldRun) {
     offsetMgr.DoTick();
     ifaceMgr.DoTick();
     hookMgr.DoTick();
+	modMgr.DoTick();
     std::this_thread::sleep_for(50ms);
   }
 
+  modMgr.DoShutdown();
   hookMgr.DoShutdown();
   ifaceMgr.DoShutdown();
   offsetMgr.DoShutdown();
