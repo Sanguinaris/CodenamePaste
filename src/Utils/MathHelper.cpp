@@ -15,8 +15,8 @@ QAngle Math::VectorAngles(const Vector& forward) {
     else
       retAngle.x.get() = 90;
   } else {
-    retAngle.x.get() = (atan2f(-forward.z, forward.Length2D()) * -180 / M_PI);
-    retAngle.y.get() = (atan2f(forward.y, forward.x) * 180 / M_PI);
+	  retAngle.x.get() = (atan2f(-forward.z, forward.Length2D()) * -180 / static_cast<float>(M_PI));
+	  retAngle.y.get() = (atan2f(forward.y, forward.x) * 180 / static_cast<float>(M_PI));
     if (retAngle.y < 90)
       retAngle.y += 180;
     else if (retAngle.y == 90)

@@ -3,7 +3,8 @@ set(HACK_SOURCES    MainEntry.cpp
                     Utils/QAngle.cpp
                     Utils/Vector.cpp
                     Managers/Offsets/OffsetManager.cpp
-                    Managers/Interfaces/InterfaceManager.cpp)
+                    Managers/Interfaces/InterfaceManager.cpp
+					Managers/Hooking/HookingManager.cpp)
 
 set(HACK_HEADERS ../include/Utils/MathHelper.h
                  ../include/Utils/QAngle.h
@@ -11,7 +12,8 @@ set(HACK_HEADERS ../include/Utils/MathHelper.h
                  ../include/Utils/VMTManager.h
                  ../include/Manager/IManager.h
                  ../include/Manager/Offsets/OffsetManager.h
-                 ../include/Manager/Interfaces/InterfaceManager.h)
+                 ../include/Manager/Interfaces/InterfaceManager.h
+				 ../include/Manager/Hooking/HookingManager.h)
 
 add_library(ProjectPaste SHARED ${HACK_SOURCES})
 target_compile_definitions(ProjectPaste PRIVATE WIN32_LEAN_AND_MEAN)
