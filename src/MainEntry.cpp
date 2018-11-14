@@ -25,13 +25,10 @@ DWORD WINAPI OffloadThread(LPVOID) {
   Interfaces::InterfaceManager ifaceMgr{};
   Hooks::HookingManager hookMgr{};
 
-  try {
     offsetMgr.DoInit();
     ifaceMgr.DoInit();
     hookMgr.DoInit();
-  } catch (const std::runtime_error&) {
-    throw;
-  }
+
 
   while (ShouldRun) {
     offsetMgr.DoTick();

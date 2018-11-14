@@ -10,6 +10,7 @@ using namespace CodeNamePaste;
 using namespace Managers;
 using namespace Offsets;
 
+
 const char totallyCool[] = "\x12\x14\x17\x69\x99";
 
 TEST_CASE("Test wether or not OffsetManager is capable of finding Signatures") {
@@ -18,15 +19,4 @@ TEST_CASE("Test wether or not OffsetManager is capable of finding Signatures") {
   auto x = FindPatternWrap(offsetMgr, char, "CTRLV.exe", "12 14 17 ?? 99");
   REQUIRE_FALSE(x == nullptr);
   CHECK(x == totallyCool);
-}
-
-#include "Managers/Hooking/HookingManager.h"
-
-TEST_CASE("DoSomething")
-{
-	Hooks::HookingManager hookMgr{};
-	auto token = RegisterCallbackWrap(hookMgr, "OnTick", [](void*) {MessageBoxW(nullptr, L"awd", L"wad", MB_OK); });
-	hookMgr.DoTick();
-	UnRegisterCallbackWrap(hookMgr, "OnTick", token);
-	hookMgr.DoTick();
 }

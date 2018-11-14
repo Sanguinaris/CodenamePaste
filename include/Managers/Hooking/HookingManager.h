@@ -25,7 +25,7 @@ namespace CodeNamePaste {
 
 			class HookingManager : public IManager {
 			public:
-
+				using CallbackFn = void(void*);
 
 			public:
 				void DoInit() override;
@@ -35,22 +35,23 @@ namespace CodeNamePaste {
 			public:
 				// TODO make callback registering constexpr
 				template<typename F>
-				const std::function<void(void*)>& RegisterCallback(F func, std::function<void(void*)>&& clbk)
+				const std::function<CallbackFn>& RegisterCallback(F func, std::function<CallbackFn>&& clbk)
 				{
 					std::unique_lock<std::shared_mutex> lock{ mutex_ };
 					return funcCallbacks[GetEnumFromString(func)].emplace_back(std::move(clbk));
 				}
 
 				template<typename F>
-				void UnRegisterCallback(F func, std::function<void(void*)>& ref)
+				void UnRegisterCallback(F func, const std::function<CallbackFn>& ref)
 				{
 					std::unique_lock<std::shared_mutex> lock{ mutex_ };
 
 					auto table = GetEnumFromString(func);
 
+
 					auto curIdx = funcCallbacks[table].begin();
-					while ((curIdx = std::find_if(curIdx, funcCallbacks[table].end(), [&ref](const auto& func) {
-						return std::addressof(func) == std::addressof(ref);
+					while ((curIdx = std::find_if(curIdx, funcCallbacks[table].end(), [&ref](const auto& fn) {
+						return std::addressof(fn) == std::addressof(ref);
 					})) != funcCallbacks[table].end())
 					{
 						curIdx = funcCallbacks[table].erase(curIdx);
@@ -72,6 +73,7 @@ namespace CodeNamePaste {
 					static_assert(internalName != HookNames::Size);
 					return internalName;
 				  }
+
 			private:
 				std::unordered_map<HookNames, std::list<std::function<void(void*)>>> funcCallbacks{};
 				std::shared_mutex mutex_;

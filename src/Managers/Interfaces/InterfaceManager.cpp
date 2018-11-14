@@ -17,7 +17,7 @@ void InterfaceManager::DoInit() {
 
 	for (auto i = 0; i < static_cast<uint8_t>(InterfaceNames::Size); ++i)
 		if (!ifaceAddys[i])
-			throw std::runtime_error{ "Not all Interfaces found!" };
+            MessageBoxW(nullptr, L"Not all interfaces found\nexpect this to crash", L"Error", MB_ICONERROR | MB_OK);
 }
 
 void InterfaceManager::DoTick() {}

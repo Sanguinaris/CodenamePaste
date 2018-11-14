@@ -7,7 +7,7 @@ set(TEST_SOURCES
 
 if(WIN32)
 	set(WIN_SOURCES Managers/TestOffsetManager.cpp ../include/Managers/Offsets/OffsetManager.h ../src/Managers/Offsets/OffsetManager.cpp
-	../include/Managers/Hooking/HookingManager.h ../src/Managers/Hooking/HookingManager.cpp)
+	Managers/TestHookingManager.cpp ../include/Managers/Hooking/HookingManager.h ../src/Managers/Hooking/HookingManager.cpp)
 endif()
 
 add_executable(CTRLV ${TEST_SOURCES} ${WIN_SOURCES})
@@ -20,6 +20,10 @@ set_target_properties(CTRLV PROPERTIES
 	CXX_STANDARD_REQUIRED YES
 	FOLDER Test
 )
+
+if(WIN32)
+	target_link_libraries(CTRLV psapi)
+endif()
 
 add_test(
     NAME CTRLV
