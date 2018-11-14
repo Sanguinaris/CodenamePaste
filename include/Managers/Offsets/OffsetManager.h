@@ -3,11 +3,13 @@
 #include <array>
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 
-#include <Psapi.h>
 #include <Windows.h>
+
+#include <Psapi.h>
 
 #include "Managers/IManager.h"
 
@@ -17,10 +19,9 @@ namespace Offsets {
 
 template <unsigned int N>
 struct PatternInfo {
-  unsigned int PatternSize;
   unsigned char Pattern[N];
   unsigned char Mask[N];
-  constexpr explicit PatternInfo() : PatternSize{N}, Pattern{}, Mask{} {}
+  constexpr explicit PatternInfo() : Pattern{}, Mask{} {}
 };
 
 struct PatternSlice {
@@ -58,7 +59,7 @@ class OffsetManager : public IManager {
 
   template <typename ret, typename F>
   const ret* FindPattern(std::string&& mod, F func) {
-    auto info = BuildPattern<GetPatternSize(func)>(func);
+    auto info = BuildPatternSignature<GetPatternSize(func()), decltype(func)>(func);
 
     HMODULE hModule = GetModuleHandleA(mod.c_str());
 
@@ -94,58 +95,43 @@ class OffsetManager : public IManager {
       const unsigned char* lpPattern,
       const unsigned char* pszMask) {
     std::array<PatternSlice, N> ret{};
-    for (auto i = 0; i < N; ++i) {
+    for (auto i = 0u; i < N; ++i) {
       ret[i].cPattern = lpPattern[i];
       ret[i].bIgnore = pszMask[i] == '?';
     }
     return ret;
   }
 
-  static constexpr const bool CompareString(const char* str1,
-                                            const char* str2) {
-    int i = 0;
-    for (; str1[i] != '\0' && str2[i] != '\0'; ++i) {
-      if (str1[i] != str2[i])
-        return false;
-    }
-
-    if (str1[i] == '\0' && str2[i] == '\0')
-      return true;
-    return false;
-  }
-
   template <typename F>
-  static constexpr const OffsetNames GetEnumFromString_impl(F func) {
-    if (CompareString(func(), "EnginePointer"))
+  static constexpr const OffsetNames GetEnumFromString_impl(std::string_view name) {
+	  if (name == "EnginePointer")
       return OffsetNames::EnginePtr;
-    if (CompareString(func(), "GameResources"))
+	  if (name == "GameResources")
       return OffsetNames::GameRes;
-    if (CompareString(func(), "GlobalVars"))
+	  if (name == "GlobalVars")
       return OffsetNames::GlobalVars;
-    if (CompareString(func(), "ClientMode"))
+    if (name == "ClientMode")
       return OffsetNames::ClientMode;
     return OffsetNames::Size;
   }
 
   template <typename F>
   static constexpr const OffsetNames GetEnumFromString(F func) {
-    static_assert(GetEnumFromString_impl(func) != OffsetNames::Size);
-    return GetEnumFromString_impl(func);
+    static_assert(GetEnumFromString_impl(func()) != OffsetNames::Size);
+    return GetEnumFromString_impl(func());
   }
 
-  template <typename F>
-  static constexpr int GetPatternSize(F func) {
-    auto name = func();
-    int ret = 1;
-    for (auto i = 0; name[i] != '\0'; ++i) {
+  static constexpr unsigned int GetPatternSize(const char* name) {
+    unsigned int ret = 1;
+    for (auto i = 0u; name[i] != '\0'; ++i) {
       if (name[i] == ' ')
         ++ret;
     }
     return ret;
   }
 
-  template <int L, typename F>
-  static constexpr const PatternInfo<L> BuildPattern(F func) {
+  template <unsigned int L, typename F>
+  static constexpr const PatternInfo<L> BuildPatternSignature(F func) {
     PatternInfo<L> info{};
 
     auto idaSig = func();

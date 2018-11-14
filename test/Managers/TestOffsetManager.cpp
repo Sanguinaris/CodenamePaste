@@ -10,6 +10,7 @@ using namespace CodeNamePaste;
 using namespace Managers;
 using namespace Offsets;
 
+
 const char totallyCool[] = "\x12\x14\x17\x69\x99";
 
 TEST_CASE("Test wether or not OffsetManager is capable of finding Signatures") {
