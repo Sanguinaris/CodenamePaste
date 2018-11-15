@@ -26,7 +26,7 @@ TEST_CASE("Test whether or not Registering and unregistering a callback works")
 		else
 			func2.set_value();
 	});
-	const auto& token2 = RegisterCallbackWrap(hookMgr, "OnTick", [&](void*) {
+	RegisterCallbackWrap(hookMgr, "OnTick", [&](void*) {
 		if (!hasCalledOnce)
 			func2.set_value();
 		else

@@ -13,8 +13,9 @@
 
 #include "Managers/IManager.h"
 
-namespace CodeNamePaste {
-namespace Managers {
+#include "Managers/NetVars/NetVarManager.h"
+
+namespace CodeNamePaste::Managers {
 namespace Offsets {
 
 template <unsigned int N>
@@ -36,6 +37,9 @@ enum class OffsetNames : uint8_t {
   GameRes,
   GlobalVars,
   ClientMode,
+
+  flashDuration,
+
   Size
 };
 
@@ -44,6 +48,9 @@ enum class OffsetNames : uint8_t {
   inst.FindPattern<ret>(mod, [] { return pattern; })
 
 class OffsetManager : public IManager {
+public:
+	OffsetManager(const NetVars::NetVarManager& nvarMgr);
+
  public:
   void DoInit() override;
 
@@ -112,6 +119,8 @@ class OffsetManager : public IManager {
       return OffsetNames::GlobalVars;
     if (name == "ClientMode")
       return OffsetNames::ClientMode;
+	if (name == "Player_FlashDuration")
+		return OffsetNames::flashDuration;
     return OffsetNames::Size;
   }
 
@@ -167,8 +176,9 @@ class OffsetManager : public IManager {
   }
 
  private:
+	 const NetVars::NetVarManager& netVarMgr;
+
   AutoNum addrOffsets[static_cast<uint8_t>(OffsetNames::Size)] = {0};
 };
 }  // namespace Offsets
 }  // namespace Managers
-}  // namespace CodeNamePaste

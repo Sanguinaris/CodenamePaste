@@ -5,8 +5,9 @@
 #include "Managers/Interfaces/InterfaceManager.h"
 #include "Managers/Offsets/OffsetManager.h"
 #include "Managers/Modules/ModuleManager.h"
+#include "Managers/NetVars/NetvarManager.h"
 
-#include "Managers/Modules/Module.h"
+#include "Modules/AntiFlash.h"
 
 #include <chrono>
 #include <thread>
@@ -18,28 +19,30 @@ using namespace std::chrono_literals;
 // return execution
 
 using namespace CodeNamePaste;
-using namespace Managers;
 
 HANDLE threadHandle;
 bool ShouldRun = true;
 
-DWORD WINAPI OffloadThread(LPVOID) {
-  Offsets::OffsetManager offsetMgr{};
-  Interfaces::InterfaceManager ifaceMgr{};
-  Hooks::HookingManager hookMgr{};
-  Modules::ModuleManager modMgr{};
+DWORD WINAPI OffloadThread(LPVOID mod) {
+  Managers::Interfaces::InterfaceManager ifaceMgr{};
+  Managers::NetVars::NetVarManager netMgr{ifaceMgr};
+  Managers::Offsets::OffsetManager offsetMgr{netMgr};
+  Managers::Hooks::HookingManager hookMgr{};
+  Managers::Modules::ModuleManager modMgr{};
 
-  modMgr.RegisterModule(std::make_unique<Modules::Module>("Module"));
-
-    offsetMgr.DoInit();
+  modMgr.RegisterModule(std::make_unique<Modules::AntiFlash>());
+  
     ifaceMgr.DoInit();
+	netMgr.DoInit();
+    offsetMgr.DoInit();
     hookMgr.DoInit();
 	modMgr.DoInit();
 
 
   while (ShouldRun) {
-    offsetMgr.DoTick();
     ifaceMgr.DoTick();
+	netMgr.DoTick();
+    offsetMgr.DoTick();
     hookMgr.DoTick();
 	modMgr.DoTick();
     std::this_thread::sleep_for(50ms);
@@ -47,9 +50,11 @@ DWORD WINAPI OffloadThread(LPVOID) {
 
   modMgr.DoShutdown();
   hookMgr.DoShutdown();
-  ifaceMgr.DoShutdown();
   offsetMgr.DoShutdown();
+  netMgr.DoShutdown();
+  ifaceMgr.DoShutdown();
 
+  FreeLibraryAndExitThread(static_cast<HMODULE>(mod), 0);
   return TRUE;
 }
 
@@ -58,7 +63,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID) {
     case DLL_PROCESS_ATTACH:
       DisableThreadLibraryCalls(hinstDLL);
       threadHandle =
-          CreateThread(nullptr, 0, &OffloadThread, nullptr, 0, nullptr);
+          CreateThread(nullptr, 0, &OffloadThread, hinstDLL, 0, nullptr);
       break;
     case DLL_PROCESS_DETACH:
       ShouldRun = false;

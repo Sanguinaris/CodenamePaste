@@ -1,4 +1,8 @@
 #pragma once
+
+#include "Managers/Interfaces/InterfaceManager.h"
+#include "Managers/Offsets/OffsetManager.h"
+
 #include <string>
 
 namespace CodeNamePaste::Managers::Modules {

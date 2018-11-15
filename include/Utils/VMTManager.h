@@ -3,7 +3,10 @@
 #ifdef _WIN32
 #include <Windows.h>
 #endif
+#include "Managers/IManager.h"
+
 #include <cstdlib>
+#include <memory>
 
 namespace CodeNamePaste {
 namespace Utils {
@@ -11,13 +14,13 @@ template <typename T>
 class VMTManager {
  public:
   VMTManager(T* base)
-      : _pBaseClass{reinterpret_cast<uint32_t***>(base)},
+      : _pBaseClass{reinterpret_cast<Managers::AutoNum***>(base)},
         _pOrigVtable{*_pBaseClass} {
     // Calculate size of VTable
     for (; (*_pBaseClass)[iVtableSize]; ++iVtableSize)
       ;
 
-    pVmtCopy = std::unique_ptr<uint32_t*[]>(new uint32_t*[iVtableSize]);
+    pVmtCopy = std::unique_ptr<Managers::AutoNum*[]>(new Managers::AutoNum*[iVtableSize]);
 
     std::copy(*_pBaseClass, *_pBaseClass + iVtableSize, pVmtCopy.get());
 
@@ -60,7 +63,7 @@ class VMTManager {
     if (idx > iVtableSize || idx < 1)
       return false;
 
-    pVmtCopy[idx] = reinterpret_cast<uint32_t*>(func);
+    pVmtCopy[idx] = reinterpret_cast<Managers::AutoNum*>(func);
 
     return true;
   }
@@ -79,10 +82,10 @@ class VMTManager {
  private:
   std::size_t iVtableSize = 0;
 
-  uint32_t*** _pBaseClass;
-  uint32_t** _pOrigVtable;
+  Managers::AutoNum*** _pBaseClass;
+  Managers::AutoNum** _pOrigVtable;
 
-  std::unique_ptr<uint32_t*[]> pVmtCopy;
+  std::unique_ptr<Managers::AutoNum*[]> pVmtCopy;
 };
 }  // namespace Utils
 }  // namespace CodeNamePaste

@@ -14,6 +14,12 @@ void InterfaceManager::DoInit() {
 		AutoNum* ifaceFn = reinterpret_cast<AutoNum*>(GetProcAddress(GetModuleHandleA("materialsystem.dll"), "CreateInterface"));
 		ifaceAddys[static_cast<uint8_t>(InterfaceNames::VMaterialSystem080)] = GetInterface(ifaceFn, "VMaterialSystem080");
 	}
+	{
+		// Material System
+		AutoNum* ifaceFn = reinterpret_cast<AutoNum*>(GetProcAddress(GetModuleHandleA("client_panorama.dll"), "CreateInterface"));
+		ifaceAddys[static_cast<uint8_t>(InterfaceNames::VClient018)] = GetInterface(ifaceFn, "VClient018");
+		ifaceAddys[static_cast<uint8_t>(InterfaceNames::VClientEntityList003)] = GetInterface(ifaceFn, "VClientEntityList003");
+	}
 
 	for (auto i = 0; i < static_cast<uint8_t>(InterfaceNames::Size); ++i)
 		if (!ifaceAddys[i])
