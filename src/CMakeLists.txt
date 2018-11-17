@@ -6,21 +6,32 @@ set(HACK_SOURCES    MainEntry.cpp
                     Managers/Interfaces/InterfaceManager.cpp
 					Managers/Hooking/HookingManager.cpp
 					Managers/Modules/Module.cpp
-					Managers/Modules/ModuleManager.cpp)
+					Managers/Modules/ModuleManager.cpp
+					Managers/NetVars/NetVarManager.cpp)
 
 set(HACK_HEADERS ../include/Utils/MathHelper.h
                  ../include/Utils/QAngle.h
                  ../include/Utils/Vector.h
                  ../include/Utils/VMTManager.h
-                 ../include/Manager/IManager.h
-                 ../include/Manager/Offsets/OffsetManager.h
-                 ../include/Manager/Interfaces/InterfaceManager.h
-				 ../include/Manager/Hooking/HookingManager.h
-				 ../include/Manager/Modules/IModule.h
-				 ../include/Manager/Modules/Module.h
-				 ../include/Manager/Modules/ModuleManager.h)
+                 ../include/Managers/IManager.h
+                 ../include/Managers/Offsets/OffsetManager.h
+                 ../include/Managers/Interfaces/InterfaceManager.h
+				 ../include/Managers/Hooking/HookingManager.h
+				 ../include/Managers/Modules/IModule.h
+				 ../include/Managers/Modules/Module.h
+				 ../include/Managers/Modules/ModuleManager.h
+				 ../include/Managers/NetVars/NetVarManager.h)
 
-add_library(ProjectPaste SHARED ${HACK_SOURCES})
+set(CSGO_INTERFACES ../include/Interfaces/VClient018.h ../include/Interfaces/VClientEntityList003.h)
+
+set(CSGO_CLASSES	../include/Classes/NetVarStuff/ClientClass.h
+					../include/Classes/NetVarStuff/RecvProp.h
+					../include/Classes/NetVarStuff/RecvTable.h
+					../include/Classes/CBaseHandle.h)
+
+set(CSGO_MODULES    Modules/AntiFlash.cpp ../include/Modules/AntiFlash.h)
+
+add_library(ProjectPaste SHARED ${HACK_SOURCES} ${HACK_HEADERS} ${CSGO_INTERFACES} ${CSGO_CLASSES} ${CSGO_MODULES})
 target_compile_definitions(ProjectPaste PRIVATE WIN32_LEAN_AND_MEAN)
 target_link_libraries(ProjectPaste psapi)
 
