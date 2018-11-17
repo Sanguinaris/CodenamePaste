@@ -48,8 +48,8 @@ enum class OffsetNames : uint8_t {
   inst.FindPattern<ret>(mod, [] { return pattern; })
 
 class OffsetManager : public IManager {
-public:
-	OffsetManager(const NetVars::NetVarManager& nvarMgr);
+ public:
+  OffsetManager(const NetVars::NetVarManager& nvarMgr);
 
  public:
   void DoInit() override;
@@ -66,7 +66,8 @@ public:
 
   template <typename ret, typename F>
   const ret* FindPattern(std::string&& mod, F func) {
-    auto info = BuildPatternSignature<GetPatternSize(func()), decltype(func)>(func);
+    auto info =
+        BuildPatternSignature<GetPatternSize(func()), decltype(func)>(func);
 
     HMODULE hModule = GetModuleHandleA(mod.c_str());
 
@@ -110,17 +111,18 @@ public:
   }
 
   template <typename F>
-  static constexpr const OffsetNames GetEnumFromString_impl(std::string_view name) {
-	  if (name == "EnginePointer")
+  static constexpr const OffsetNames GetEnumFromString_impl(
+      std::string_view name) {
+    if (name == "EnginePointer")
       return OffsetNames::EnginePtr;
-	  if (name == "GameResources")
+    if (name == "GameResources")
       return OffsetNames::GameRes;
-	  if (name == "GlobalVars")
+    if (name == "GlobalVars")
       return OffsetNames::GlobalVars;
     if (name == "ClientMode")
       return OffsetNames::ClientMode;
-	if (name == "Player_FlashDuration")
-		return OffsetNames::flashDuration;
+    if (name == "Player_FlashDuration")
+      return OffsetNames::flashDuration;
     return OffsetNames::Size;
   }
 
@@ -176,9 +178,9 @@ public:
   }
 
  private:
-	 const NetVars::NetVarManager& netVarMgr;
+  const NetVars::NetVarManager& netVarMgr;
 
   AutoNum addrOffsets[static_cast<uint8_t>(OffsetNames::Size)] = {0};
 };
 }  // namespace Offsets
-}  // namespace Managers
+}  // namespace CodeNamePaste::Managers

@@ -1,6 +1,6 @@
 #pragma once
-#include <type_traits>
 #include <cstdint>
+#include <type_traits>
 
 namespace CodeNamePaste {
 namespace Managers {

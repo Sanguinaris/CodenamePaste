@@ -20,7 +20,8 @@ class VMTManager {
     for (; (*_pBaseClass)[iVtableSize]; ++iVtableSize)
       ;
 
-    pVmtCopy = std::unique_ptr<Managers::AutoNum*[]>(new Managers::AutoNum*[iVtableSize]);
+    pVmtCopy = std::unique_ptr<Managers::AutoNum*[]>(
+        new Managers::AutoNum*[iVtableSize]);
 
     std::copy(*_pBaseClass, *_pBaseClass + iVtableSize, pVmtCopy.get());
 

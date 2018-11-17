@@ -1,11 +1,10 @@
 #include <Windows.h>
 
-
 #include "Managers/Hooking/HookingManager.h"
 #include "Managers/Interfaces/InterfaceManager.h"
-#include "Managers/Offsets/OffsetManager.h"
 #include "Managers/Modules/ModuleManager.h"
 #include "Managers/NetVars/NetvarManager.h"
+#include "Managers/Offsets/OffsetManager.h"
 
 #include "Modules/AntiFlash.h"
 
@@ -31,20 +30,19 @@ DWORD WINAPI OffloadThread(LPVOID mod) {
   Managers::Modules::ModuleManager modMgr{};
 
   modMgr.RegisterModule(std::make_unique<Modules::AntiFlash>());
-  
-    ifaceMgr.DoInit();
-	netMgr.DoInit();
-    offsetMgr.DoInit();
-    hookMgr.DoInit();
-	modMgr.DoInit();
 
+  ifaceMgr.DoInit();
+  netMgr.DoInit();
+  offsetMgr.DoInit();
+  hookMgr.DoInit();
+  modMgr.DoInit();
 
   while (ShouldRun) {
     ifaceMgr.DoTick();
-	netMgr.DoTick();
+    netMgr.DoTick();
     offsetMgr.DoTick();
     hookMgr.DoTick();
-	modMgr.DoTick();
+    modMgr.DoTick();
     std::this_thread::sleep_for(50ms);
   }
 
