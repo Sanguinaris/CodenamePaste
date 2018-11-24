@@ -13,7 +13,7 @@
 
 #include "Managers/IManager.h"
 
-#include "Managers/NetVars/NetVarManager.h"
+#include "Managers/NetVars/NetvarManager.h"
 
 namespace CodeNamePaste::Managers {
 namespace Offsets {

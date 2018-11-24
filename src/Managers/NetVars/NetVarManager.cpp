@@ -4,15 +4,19 @@
 #include <string_view>
 
 using namespace CodeNamePaste::Managers::NetVars;
-using namespace CodeNamePaste::Managers::Interfaces;
 
-NetVarManager::NetVarManager(InterfaceManager& ifaceMgr) : ifaceMgr{ifaceMgr} {}
+using namespace CodeNamePaste;
+
+NetVarManager::NetVarManager(Managers::Interfaces::InterfaceManager& ifaceMgr)
+    : ifaceMgr{ifaceMgr} {}
 
 void NetVarManager::DoInit() {
   tables.clear();
 
-  for (auto client = GetInterfaceWrap(ifaceMgr, IBaseClientDLL, "VClient")
-                         ->GetAllClasses();
+  for (auto client =
+           GetInterfaceWrap(ifaceMgr, CodeNamePaste::Interfaces::IBaseClientDLL,
+                            "VClient")
+               ->GetAllClasses();
        client; client = client->m_pNext) {
     auto recvTable = client->m_pRecvTable;
     if (recvTable)
@@ -29,7 +33,7 @@ bool NetVarManager::DoShutdown() {
 const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
     const std::string& tableName,
     const std::string& propName,
-    RecvProp** prop) const {
+    Classes::RecvProp** prop) const {
   const auto recvTable = tables.find(tableName);
   if (recvTable == tables.end() || !recvTable->second)
     return 0;
@@ -37,9 +41,9 @@ const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
 }
 
 const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
-    const RecvTable& recvTable,
+    const Classes::RecvTable& recvTable,
     const std::string& propName,
-    RecvProp** prop) const {
+    Classes::RecvProp** prop) const {
   AutoNum addOffy = 0;
 
   for (auto i = 0; i < recvTable.m_nProps; ++i) {

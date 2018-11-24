@@ -5,8 +5,16 @@
 
 #include <unordered_map>
 
-namespace CodeNamePaste::Managers {
+namespace CodeNamePaste {
+namespace Managers {
 namespace NetVars {
+#define ADD_NETVAR(ret, name, table, prop)           \
+  auto& name() {                                     \
+    static CodeNamePaste::Managers::AutoNum offset = \
+        Netvars->GetProp(table, prop);               \
+    return *reinterpret_cast<ret*>(this + offset);   \
+  }
+
 class NetVarManager : public IManager {
  public:
   NetVarManager(Interfaces::InterfaceManager& ifaceMgr);
@@ -19,16 +27,17 @@ class NetVarManager : public IManager {
  public:
   const AutoNum GetProp(const std::string& tableName,
                         const std::string& propName,
-                        RecvProp** prop = nullptr) const;
+                        Classes::RecvProp** prop = nullptr) const;
 
  private:
-  const AutoNum GetProp(const RecvTable& recvTable,
+  const AutoNum GetProp(const Classes::RecvTable& recvTable,
                         const std::string& propName,
-                        RecvProp** prop = nullptr) const;
+                        Classes::RecvProp** prop = nullptr) const;
 
  private:
   Interfaces::InterfaceManager& ifaceMgr;
-  std::unordered_map<std::string, RecvTable*> tables;
+  std::unordered_map<std::string, Classes::RecvTable*> tables;
 };
 }  // namespace NetVars
-}  // namespace CodeNamePaste::Managers
+}  // namespace Managers
+}  // namespace CodeNamePaste

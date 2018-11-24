@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 
+namespace CodeNamePaste::Classes {
 // https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/public/dt_common.h#L111
 typedef enum {
   DPT_Int = 0,
@@ -12,7 +13,7 @@ typedef enum {
   DPT_DataTable,
 #if 0  // We can't ship this since it changes the size of DTVariant to be 20
        // bytes instead of 16 and that breaks MODs!!!
-	DPT_Quaternion,
+		DPT_Quaternion,
 #endif
 
 #ifdef SUPPORTS_INT64
@@ -32,7 +33,7 @@ class DVariant {
     void* m_pData;  // For DataTables.
 #if 0  // We can't ship this since it changes the size of DTVariant to be 20
        // bytes instead of 16 and that breaks MODs!!!
-		float	m_Vector[4];
+			float	m_Vector[4];
 #else
     float m_Vector[3];
 #endif
@@ -97,3 +98,4 @@ class RecvProp {
   // these can be used to get its array property name for debugging.
   const char* m_pParentArrayPropName;
 };
+}  // namespace CodeNamePaste::Classes
