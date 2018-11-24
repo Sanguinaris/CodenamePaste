@@ -22,12 +22,13 @@ set(HACK_HEADERS ../include/Utils/MathHelper.h
 				 ../include/Managers/Modules/ModuleManager.h
 				 ../include/Managers/NetVars/NetVarManager.h)
 
-set(CSGO_INTERFACES ../include/Interfaces/VClient018.h ../include/Interfaces/VClientEntityList003.h)
+set(CSGO_INTERFACES ../include/Interfaces/VClient018.h ../include/Interfaces/VClientEntityList003.h
+			../include/Interfaces/IEngineClient.h)
 
 set(CSGO_CLASSES	../include/Classes/NetVarStuff/ClientClass.h
 					../include/Classes/NetVarStuff/RecvProp.h
 					../include/Classes/NetVarStuff/RecvTable.h
-					../include/Classes/CBaseHandle.h)
+					../include/Classes/CBaseEntity.h Classes/CBaseEntity.cpp)
 
 set(CSGO_MODULES    Modules/AntiFlash.cpp ../include/Modules/AntiFlash.h)
 

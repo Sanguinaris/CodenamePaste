@@ -13,6 +13,7 @@ namespace Interfaces {
 enum class InterfaceNames : uint8_t {
   VClient018,
   VClientEntityList003,
+  VEngineClient,
   VMaterialSystem080,
   Size
 };
@@ -50,6 +51,8 @@ class InterfaceManager : public IManager {
       return InterfaceNames::VClient018;
     if (name == "VClientEntityList")
       return InterfaceNames::VClientEntityList003;
+    if (name == "VEngineClient")
+      return InterfaceNames::VEngineClient;
     if (name == "VMaterialSystem")
       return InterfaceNames::VMaterialSystem080;
     return InterfaceNames::Size;

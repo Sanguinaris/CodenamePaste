@@ -6,6 +6,7 @@
 #include "Managers/NetVars/NetvarManager.h"
 #include "Managers/Offsets/OffsetManager.h"
 
+#include "Classes/CBaseEntity.h"
 #include "Modules/AntiFlash.h"
 
 #include <chrono>
@@ -27,7 +28,9 @@ DWORD WINAPI OffloadThread(LPVOID mod) {
   Managers::NetVars::NetVarManager netMgr{ifaceMgr};
   Managers::Offsets::OffsetManager offsetMgr{netMgr};
   Managers::Hooks::HookingManager hookMgr{};
-  Managers::Modules::ModuleManager modMgr{};
+  Managers::Modules::ModuleManager modMgr{ifaceMgr, netMgr, offsetMgr, hookMgr};
+
+  Classes::CBaseEntity::Netvars = &netMgr;
 
   modMgr.RegisterModule(std::make_unique<Modules::AntiFlash>());
 

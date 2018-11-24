@@ -1,6 +1,7 @@
 #pragma once
 #include "RecvProp.h"
 
+namespace CodeNamePaste::Classes {
 // https://github.com/pmrowla/hl2sdk-csgo/blob/master/public/dt_recv.h#L170
 class RecvTable {
  public:
@@ -69,3 +70,4 @@ inline void RecvTable::SetInMainList(bool bInList) {
 inline bool RecvTable::IsInMainList() const {
   return m_bInMainList;
 }
+}  // namespace CodeNamePaste::Classes
