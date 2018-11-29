@@ -30,7 +30,7 @@ bool NetVarManager::DoShutdown() {
   return true;
 }
 
-const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
+const CodeNamePaste::Managers::AutoNum NetVarManager::GetProperty(
     const std::string& tableName,
     const std::string& propName,
     Classes::RecvProp** prop) const {

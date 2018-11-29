@@ -11,7 +11,7 @@ namespace NetVars {
 #define ADD_NETVAR(ret, name, table, prop)           \
   auto& name() {                                     \
     static CodeNamePaste::Managers::AutoNum offset = \
-        Netvars->GetProp(table, prop);               \
+        Netvars->GetProperty(table, prop);           \
     return *reinterpret_cast<ret*>(this + offset);   \
   }
 
@@ -25,7 +25,7 @@ class NetVarManager : public IManager {
   bool DoShutdown() override;
 
  public:
-  const AutoNum GetProp(const std::string& tableName,
+  const AutoNum GetProperty(const std::string& tableName,	// Originally GetProp but windows.h ain't no fun
                         const std::string& propName,
                         Classes::RecvProp** prop = nullptr) const;
 

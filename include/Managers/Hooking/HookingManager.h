@@ -33,26 +33,29 @@ class HookingManager : public IManager {
  public:
   // TODO make callback registering constexpr
   template <typename F>
-  const std::function<CallbackFn>& RegisterCallback(
+  void* RegisterCallback(
       F func,
       std::function<CallbackFn>&& clbk) {
     std::unique_lock<std::shared_mutex> lock{mutex_};
-    return funcCallbacks[GetEnumFromString(func)].emplace_back(std::move(clbk));
+    return &funcCallbacks[GetEnumFromString(func)].emplace_back(std::move(clbk));
   }
 
   template <typename F>
-  void UnRegisterCallback(F func, const std::function<CallbackFn>& ref) {
+  bool UnRegisterCallback(F func, const void* ref) {
     std::unique_lock<std::shared_mutex> lock{mutex_};
+	bool deletedSomething = false;
 
     auto table = GetEnumFromString(func);
 
     auto curIdx = funcCallbacks[table].begin();
     while ((curIdx = std::find_if(
                 curIdx, funcCallbacks[table].end(), [&ref](const auto& fn) {
-                  return std::addressof(fn) == std::addressof(ref);
+                  return std::addressof(fn) == ref;
                 })) != funcCallbacks[table].end()) {
       curIdx = funcCallbacks[table].erase(curIdx);
+	  deletedSomething = true;
     }
+	return deletedSomething;
   }
 
  private:
