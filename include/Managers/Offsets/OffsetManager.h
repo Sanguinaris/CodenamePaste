@@ -18,7 +18,7 @@
 namespace CodeNamePaste::Managers {
 namespace Offsets {
 
-template <unsigned int N>
+template <size_t N>
 struct PatternInfo {
   unsigned char Pattern[N];
   unsigned char Mask[N];
@@ -33,12 +33,11 @@ struct PatternSlice {
 };
 
 enum class OffsetNames : uint8_t {
+  LocalPlayer,
   EnginePtr,
   GameRes,
   GlobalVars,
   ClientMode,
-
-  flashDuration,
 
   Size
 };
@@ -66,8 +65,7 @@ class OffsetManager : public IManager {
 
   template <typename ret, typename F>
   const ret* FindPattern(std::string&& mod, F func) {
-    auto info =
-        BuildPatternSignature<GetPatternSize(func()), decltype(func)>(func);
+	constexpr auto pattern = BuildArrPattern(BuildPatternSignature<GetPatternSize(func())>(func()));
 
     HMODULE hModule = GetModuleHandleA(mod.c_str());
 
@@ -78,34 +76,30 @@ class OffsetManager : public IManager {
     GetModuleInformation(GetCurrentProcess(), hModule, &modInfo,
                          sizeof(MODULEINFO));
 
-    return FindPattern(
-        reinterpret_cast<ret*>(modInfo.lpBaseOfDll),
-        reinterpret_cast<ret*>(modInfo.lpBaseOfDll) + modInfo.SizeOfImage,
-        std::move(info));
+    return FindPattern<ret>(
+        reinterpret_cast<unsigned char*>(modInfo.lpBaseOfDll),
+        reinterpret_cast<unsigned char*>(modInfo.lpBaseOfDll) + modInfo.SizeOfImage,
+        std::move(pattern));
   }
 
  private:
-  template <typename ret, unsigned int N>
-  ret* FindPattern(ret* start, ret* end, PatternInfo<N>&& info) {
-    auto pattern = BuildArrPattern<N>(info.Pattern, info.Mask);
-
+  template <typename ret, size_t N>
+  const ret* FindPattern(const unsigned char* start, const unsigned char* end, const std::array<PatternSlice, N>&& pattern) {
     auto addy = std::search(
         start, end, pattern.begin(), pattern.end(),
         [&](unsigned char curr, const PatternSlice& currPattern) {
           return currPattern.bIgnore || curr == currPattern.cPattern;
         });
-    return (addy != end) ? addy : 0;
+    return (addy != end) ? reinterpret_cast<const ret*>(addy) : nullptr;
   }
 
  private:
-  template <unsigned int N>
-  static constexpr const std::array<PatternSlice, N> BuildArrPattern(
-      const unsigned char* lpPattern,
-      const unsigned char* pszMask) {
+  template <size_t N>
+  static constexpr const std::array<PatternSlice, N> BuildArrPattern(const PatternInfo<N>&& info) {
     std::array<PatternSlice, N> ret{};
     for (auto i = 0u; i < N; ++i) {
-      ret[i].cPattern = lpPattern[i];
-      ret[i].bIgnore = pszMask[i] == '?';
+      ret[i].cPattern = info.Pattern[i];
+      ret[i].bIgnore = info.Mask[i] == '?';
     }
     return ret;
   }
@@ -113,6 +107,8 @@ class OffsetManager : public IManager {
   template <typename F>
   static constexpr const OffsetNames GetEnumFromString_impl(
       std::string_view name) {
+	if (name == "LocalPlayer")
+	  return OffsetNames::LocalPlayer;
     if (name == "EnginePointer")
       return OffsetNames::EnginePtr;
     if (name == "GameResources")
@@ -121,8 +117,6 @@ class OffsetManager : public IManager {
       return OffsetNames::GlobalVars;
     if (name == "ClientMode")
       return OffsetNames::ClientMode;
-    if (name == "Player_FlashDuration")
-      return OffsetNames::flashDuration;
     return OffsetNames::Size;
   }
 
@@ -141,11 +135,9 @@ class OffsetManager : public IManager {
     return ret;
   }
 
-  template <unsigned int L, typename F>
-  static constexpr const PatternInfo<L> BuildPatternSignature(F func) {
+  template <size_t L>
+  static constexpr const PatternInfo<L> BuildPatternSignature(const char* idaSig) {
     PatternInfo<L> info{};
-
-    auto idaSig = func();
 
     unsigned char tmpChar = 0;
     auto curSigIdx = 0;
@@ -163,10 +155,17 @@ class OffsetManager : public IManager {
         ++curSigIdx;
       } else if (idaSig[i] != '?' && idaSig[i] != ' ') {
         tmpChar *= 16;
-        tmpChar +=
-            (idaSig[i] >= 'a')
-                ? idaSig[i] - ('a' + 10)
-                : (idaSig[i] >= 'A') ? idaSig[i] - ('A' + 10) : idaSig[i] - '0';
+        if (idaSig[i] >= 'a') // Lowercase letterz
+		{
+			tmpChar += idaSig[i] - ('a' + 10);
+		}
+		else if (idaSig[i] >= 'A') // Uppercase letterz
+		{
+			tmpChar += idaSig[i] - 'A' + 10;
+		}
+		else {	// Numeros
+			tmpChar += idaSig[i] - '0';
+		}
       }
     }
     if (idaSig[i - 1] != '?') {
