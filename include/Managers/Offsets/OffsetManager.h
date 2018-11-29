@@ -59,7 +59,7 @@ class OffsetManager : public IManager {
 
  public:
   template <typename F>
-  const AutoNum GetOffset(F func) {
+  const AutoNum GetOffset(F func) const {
     return addrOffsets[static_cast<uint8_t>(GetEnumFromString(func))];
   }
 
@@ -104,7 +104,6 @@ class OffsetManager : public IManager {
     return ret;
   }
 
-  template <typename F>
   static constexpr const OffsetNames GetEnumFromString_impl(
       std::string_view name) {
 	if (name == "LocalPlayer")
@@ -122,7 +121,8 @@ class OffsetManager : public IManager {
 
   template <typename F>
   static constexpr const OffsetNames GetEnumFromString(F func) {
-    static_assert(GetEnumFromString_impl(func()) != OffsetNames::Size);
+	constexpr auto internalName = GetEnumFromString_impl(func());
+    static_assert(internalName != OffsetNames::Size);
     return GetEnumFromString_impl(func());
   }
 

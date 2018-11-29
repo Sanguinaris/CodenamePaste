@@ -20,7 +20,7 @@ TEST_CASE(
   std::promise<void> func2s2{};
   bool hasCalledOnce = false;
 
-  const auto& token = RegisterCallbackWrap(hookMgr, "OnTick", [&](void*) {
+  const auto token = RegisterCallbackWrap(hookMgr, "OnTick", [&](void*) {
     if (!hasCalledOnce)
       func1.set_value();
     else
