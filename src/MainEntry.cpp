@@ -40,7 +40,7 @@ DWORD WINAPI OffloadThread(LPVOID mod) {
   hookMgr.DoInit();
   modMgr.DoInit();
 
-  while (ShouldRun) {
+  while (ShouldRun && (GetAsyncKeyState(VK_F10) & 1) != 1) {
     ifaceMgr.DoTick();
     netMgr.DoTick();
     offsetMgr.DoTick();

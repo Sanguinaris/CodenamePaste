@@ -12,7 +12,7 @@ namespace NetVars {
   auto& name() {                                     \
     static CodeNamePaste::Managers::AutoNum offset = \
         Netvars->GetProperty(table, prop);           \
-    return *reinterpret_cast<ret*>(this + offset);   \
+    return *reinterpret_cast<ret*>((*reinterpret_cast<char**>(this)) + offset);   \
   }
 
 class NetVarManager : public IManager {

@@ -16,9 +16,9 @@ typedef enum {
 		DPT_Quaternion,
 #endif
 
-#ifdef SUPPORTS_INT64
+//#ifdef SUPPORTS_INT64
   DPT_Int64,
-#endif
+//#endif
 
   DPT_NUMSendPropTypes
 } SendPropType;
