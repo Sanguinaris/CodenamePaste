@@ -20,7 +20,7 @@ void NetVarManager::DoInit() {
        client; client = client->m_pNext) {
     auto recvTable = client->m_pRecvTable;
     if (recvTable)
-      tables.emplace(std::string{client->GetName()}, recvTable);
+      tables.emplace(std::string{client->m_pNetworkName}, recvTable);
   }
 }
 
@@ -47,20 +47,22 @@ const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
   AutoNum addOffy = 0;
 
   for (auto i = 0; i < recvTable.m_nProps; ++i) {
-    auto& recvProp = recvTable.m_pProps[i];
-    auto recvChild = recvProp.m_pDataTable;
+    auto recvProp = &recvTable.m_pProps[i];
+    auto recvChild = recvProp->m_pDataTable;
 
     if (recvChild && recvChild->m_nProps > 0) {
-      addOffy += recvProp.m_Offset + GetProp(*recvChild, propName, prop);
+		auto tmp = GetProp(*recvChild, propName, prop);
+		if(tmp)
+      addOffy += recvProp->m_Offset + tmp;
     }
 
-    if (std::string_view{recvProp.m_pVarName} != propName)
+    if (std::string_view{recvProp->m_pVarName} != propName)
       continue;
 
     if (prop)
-      *prop = &recvProp;
+      *prop = recvProp;
 
-    return recvProp.m_Offset + addOffy;
+    return recvProp->m_Offset + addOffy;
   }
   return addOffy;
 }

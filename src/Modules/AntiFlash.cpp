@@ -8,7 +8,8 @@ AntiFlash::AntiFlash() : Module::Module{"AntiFlash"} {}
 void AntiFlash::DoInit() {
 	pLocalPlayer = reinterpret_cast<Classes::CBaseEntity*>(GetOffsetWrap(offyMgr->get(), "LocalPlayer"));
 	OnTickClbk = RegisterCallbackWrap(hookMgr->get(), "OnTick", [this](const auto) {
-		pLocalPlayer->m_flFlashDuration() = 0;
+		if (pLocalPlayer)
+			pLocalPlayer->m_flFlashDuration() = 0;
 	});
 }
 

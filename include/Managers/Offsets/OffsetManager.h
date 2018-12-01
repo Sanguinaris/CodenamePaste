@@ -43,8 +43,8 @@ enum class OffsetNames : uint8_t {
 };
 
 #define GetOffsetWrap(inst, name) inst.GetOffset([] { return name; })
-#define FindPatternWrap(inst, ret, mod, pattern) \
-  inst.FindPattern<ret>(mod, [] { return pattern; })
+#define FindPatternWrap(inst, ret, start, end, pattern) \
+  inst.FindPattern<ret>(start, end, [] { return pattern; })
 
 class OffsetManager : public IManager {
  public:
@@ -64,33 +64,15 @@ class OffsetManager : public IManager {
   }
 
   template <typename ret, typename F>
-  const ret* FindPattern(std::string&& mod, F func) {
+  const ret* FindPattern(const uint8_t* start, const uint8_t* end, F func) {
 	constexpr auto pattern = BuildArrPattern(BuildPatternSignature<GetPatternSize(func())>(func()));
 
-    HMODULE hModule = GetModuleHandleA(mod.c_str());
-
-    if (hModule == nullptr)
-      return nullptr;
-
-    MODULEINFO modInfo;
-    GetModuleInformation(GetCurrentProcess(), hModule, &modInfo,
-                         sizeof(MODULEINFO));
-
-    return FindPattern<ret>(
-        reinterpret_cast<unsigned char*>(modInfo.lpBaseOfDll),
-        reinterpret_cast<unsigned char*>(modInfo.lpBaseOfDll) + modInfo.SizeOfImage,
-        std::move(pattern));
-  }
-
- private:
-  template <typename ret, size_t N>
-  const ret* FindPattern(const unsigned char* start, const unsigned char* end, const std::array<PatternSlice, N>&& pattern) {
-    auto addy = std::search(
-        start, end, pattern.begin(), pattern.end(),
-        [&](unsigned char curr, const PatternSlice& currPattern) {
-          return currPattern.bIgnore || curr == currPattern.cPattern;
-        });
-    return (addy != end) ? reinterpret_cast<const ret*>(addy) : nullptr;
+	auto addy = std::search(
+		start, end, pattern.begin(), pattern.end(),
+		[&](unsigned char curr, const PatternSlice& currPattern) {
+		return currPattern.bIgnore || curr == currPattern.cPattern;
+	});
+	return (addy != end) ? reinterpret_cast<const ret*>(addy) : nullptr;
   }
 
  private:
