@@ -65,19 +65,21 @@ class OffsetManager : public IManager {
 
   template <typename ret, typename F>
   const ret* FindPattern(const uint8_t* start, const uint8_t* end, F func) {
-	constexpr auto pattern = BuildArrPattern(BuildPatternSignature<GetPatternSize(func())>(func()));
+    constexpr auto pattern =
+        BuildArrPattern(BuildPatternSignature<GetPatternSize(func())>(func()));
 
-	auto addy = std::search(
-		start, end, pattern.begin(), pattern.end(),
-		[&](unsigned char curr, const PatternSlice& currPattern) {
-		return currPattern.bIgnore || curr == currPattern.cPattern;
-	});
-	return (addy != end) ? reinterpret_cast<const ret*>(addy) : nullptr;
+    auto addy = std::search(
+        start, end, pattern.begin(), pattern.end(),
+        [&](unsigned char curr, const PatternSlice& currPattern) {
+          return currPattern.bIgnore || curr == currPattern.cPattern;
+        });
+    return (addy != end) ? reinterpret_cast<const ret*>(addy) : nullptr;
   }
 
  private:
   template <size_t N>
-  static constexpr const std::array<PatternSlice, N> BuildArrPattern(const PatternInfo<N>&& info) {
+  static constexpr const std::array<PatternSlice, N> BuildArrPattern(
+      const PatternInfo<N>&& info) {
     std::array<PatternSlice, N> ret{};
     for (auto i = 0u; i < N; ++i) {
       ret[i].cPattern = info.Pattern[i];
@@ -88,8 +90,8 @@ class OffsetManager : public IManager {
 
   static constexpr const OffsetNames GetEnumFromString_impl(
       std::string_view name) {
-	if (name == "LocalPlayer")
-	  return OffsetNames::LocalPlayer;
+    if (name == "LocalPlayer")
+      return OffsetNames::LocalPlayer;
     if (name == "EnginePointer")
       return OffsetNames::EnginePtr;
     if (name == "GameResources")
@@ -103,7 +105,7 @@ class OffsetManager : public IManager {
 
   template <typename F>
   static constexpr const OffsetNames GetEnumFromString(F func) {
-	constexpr auto internalName = GetEnumFromString_impl(func());
+    constexpr auto internalName = GetEnumFromString_impl(func());
     static_assert(internalName != OffsetNames::Size);
     return GetEnumFromString_impl(func());
   }
@@ -118,7 +120,8 @@ class OffsetManager : public IManager {
   }
 
   template <size_t L>
-  static constexpr const PatternInfo<L> BuildPatternSignature(const char* idaSig) {
+  static constexpr const PatternInfo<L> BuildPatternSignature(
+      const char* idaSig) {
     PatternInfo<L> info{};
 
     unsigned char tmpChar = 0;
@@ -137,17 +140,15 @@ class OffsetManager : public IManager {
         ++curSigIdx;
       } else if (idaSig[i] != '?' && idaSig[i] != ' ') {
         tmpChar *= 16;
-        if (idaSig[i] >= 'a') // Lowercase letterz
-		{
-			tmpChar += idaSig[i] - ('a' + 10);
-		}
-		else if (idaSig[i] >= 'A') // Uppercase letterz
-		{
-			tmpChar += idaSig[i] - 'A' + 10;
-		}
-		else {	// Numeros
-			tmpChar += idaSig[i] - '0';
-		}
+        if (idaSig[i] >= 'a')  // Lowercase letterz
+        {
+          tmpChar += idaSig[i] - ('a' + 10);
+        } else if (idaSig[i] >= 'A')  // Uppercase letterz
+        {
+          tmpChar += idaSig[i] - 'A' + 10;
+        } else {  // Numeros
+          tmpChar += idaSig[i] - '0';
+        }
       }
     }
     if (idaSig[i - 1] != '?') {

@@ -8,11 +8,12 @@
 namespace CodeNamePaste {
 namespace Managers {
 namespace NetVars {
-#define ADD_NETVAR(ret, name, table, prop)           \
-  auto& name() {                                     \
-    static CodeNamePaste::Managers::AutoNum offset = \
-        Netvars->GetProperty(table, prop);           \
-    return *reinterpret_cast<ret*>((*reinterpret_cast<char**>(this)) + offset);   \
+#define ADD_NETVAR(ret, name, table, prop)                             \
+  auto& name() {                                                       \
+    static CodeNamePaste::Managers::AutoNum offset =                   \
+        Netvars->GetProperty(table, prop);                             \
+    return *reinterpret_cast<ret*>((*reinterpret_cast<char**>(this)) + \
+                                   offset);                            \
   }
 
 class NetVarManager : public IManager {
@@ -25,9 +26,11 @@ class NetVarManager : public IManager {
   bool DoShutdown() override;
 
  public:
-  const AutoNum GetProperty(const std::string& tableName,	// Originally GetProp but windows.h ain't no fun
-                        const std::string& propName,
-                        Classes::RecvProp** prop = nullptr) const;
+  const AutoNum GetProperty(
+      const std::string&
+          tableName,  // Originally GetProp but windows.h ain't no fun
+      const std::string& propName,
+      Classes::RecvProp** prop = nullptr) const;
 
  private:
   const AutoNum GetProp(const Classes::RecvTable& recvTable,

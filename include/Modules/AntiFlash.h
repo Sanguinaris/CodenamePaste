@@ -14,11 +14,11 @@ class AntiFlash : public Managers::Modules::Module {
   void DoInit() override;
   bool DoShutdown() override;
 
-private:
-	void* OnTickClbk;
+ private:
+  void* OnTickClbk;
 
-private:
-	Classes::CBaseEntity* pLocalPlayer = nullptr;
+ private:
+  Classes::CBaseEntity* pLocalPlayer = nullptr;
 };
 }  // namespace Modules
 }  // namespace CodeNamePaste

@@ -51,9 +51,9 @@ const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
     auto recvChild = recvProp->m_pDataTable;
 
     if (recvChild && recvChild->m_nProps > 0) {
-		auto tmp = GetProp(*recvChild, propName, prop);
-		if(tmp)
-      addOffy += recvProp->m_Offset + tmp;
+      auto tmp = GetProp(*recvChild, propName, prop);
+      if (tmp)
+        addOffy += recvProp->m_Offset + tmp;
     }
 
     if (std::string_view{recvProp->m_pVarName} != propName)
