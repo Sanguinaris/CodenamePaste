@@ -38,7 +38,7 @@ namespace CodeNamePaste {
 			int command_number;
 			int tick_count;
 			Utils::QAngle viewangles;
-			Utils::Vector aimdirection;
+			Utils::Vector3 aimdirection;
 			float forwardmove;
 			float sidemove;
 			float upmove;

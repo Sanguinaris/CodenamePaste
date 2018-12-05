@@ -4,57 +4,49 @@
 using namespace CodeNamePaste;
 using namespace Utils;
 
-float* GimmeAVec() {
-  float* fl = new float[3];
-  fl[0] = 1.f;
-  fl[1] = 1.f;
-  fl[2] = 1.f;
-  return fl;
-}
-
 TEST_CASE("Vector can Access Parameters") {
-  const Vector vec{};
-  const Vector vec2{1.f, 2.f, 3.f};
-
-  CHECK(vec[0] == 0.f);
-  CHECK(vec[1] == 0.f);
-  CHECK(vec[2] == 0.f);
-  CHECK(vec2[0] == 1.f);
-  CHECK(vec2[1] == 2.f);
-  CHECK(vec2[2] == 3.f);
-}
-
-TEST_CASE("Vector can Access Parameters and modify em") {
-  Vector vec{};
-
-  CHECK(vec[0] == 0.f);
-  CHECK(vec[1] == 0.f);
-  CHECK(vec[2] == 0.f);
-  vec[0] = 1.f;
-  vec[1] = 2.f;
-  vec[2] = 3.f;
-  CHECK(vec[0] == 1.f);
-  CHECK(vec[1] == 2.f);
-  CHECK(vec[2] == 3.f);
-}
-
-TEST_CASE("Vector can Access Parameters and modify em via x y and z") {
-  Vector vec{};
+  const Vector3 vec{};
+  const Vector3 vec2{1.f, 2.f, 3.f};
 
   CHECK(vec.x == 0.f);
   CHECK(vec.y == 0.f);
   CHECK(vec.z == 0.f);
-  vec.x.get() = 1.f;
-  vec.y.get() = 2.f;
-  vec.z.get() = 3.f;
+  CHECK(vec2.x == 1.f);
+  CHECK(vec2.y == 2.f);
+  CHECK(vec2.z == 3.f);
+}
+
+TEST_CASE("Vector can Access Parameters and modify em") {
+  Vector3 vec{};
+
+  CHECK(vec.x == 0.f);
+  CHECK(vec.y == 0.f);
+  CHECK(vec.z == 0.f);
+  vec.x = 1.f;
+  vec.y = 2.f;
+  vec.z = 3.f;
+  CHECK(vec.x == 1.f);
+  CHECK(vec.y == 2.f);
+  CHECK(vec.z == 3.f);
+}
+
+TEST_CASE("Vector can Access Parameters and modify em via x y and z") {
+  Vector3 vec{};
+
+  CHECK(vec.x == 0.f);
+  CHECK(vec.y == 0.f);
+  CHECK(vec.z == 0.f);
+  vec.x = 1.f;
+  vec.y = 2.f;
+  vec.z = 3.f;
   CHECK(vec.x == 1.f);
   CHECK(vec.y == 2.f);
   CHECK(vec.z == 3.f);
 }
 
 TEST_CASE("Vector can compare itself") {
-  Vector vec{};
-  Vector otherVec{1.f};
+  Vector3 vec{};
+  Vector3 otherVec{1.f};
   CHECK(vec == vec);
   CHECK_FALSE(vec == otherVec);
   CHECK_FALSE(vec != vec);
@@ -62,8 +54,8 @@ TEST_CASE("Vector can compare itself") {
 }
 
 TEST_CASE("Vector can add stuff") {
-  Vector vec{};
-  Vector vec2{1.f, 2.f, 3.f};
+  Vector3 vec{};
+  Vector3 vec2{1.f, 2.f, 3.f};
 
   vec += vec2;
   CHECK(vec == vec2);
@@ -74,31 +66,23 @@ TEST_CASE("Vector can add stuff") {
 }
 
 TEST_CASE("Vector can subtract stuff") {
-  Vector vec{4.f, 8.f, 12.f};
-  Vector vec2{2.f, 4.f, 6.f};
+  Vector3 vec{4.f, 8.f, 12.f};
+  Vector3 vec2{2.f, 4.f, 6.f};
 
   CHECK((vec.x == 4.f && vec.y == 8.f && vec.z == 12.f));
   vec -= vec2;
   CHECK(vec == vec2);
   vec = vec - vec;
-  CHECK(vec == Vector{});
-}
-
-TEST_CASE("Vector works with External Vector") {
-  Vector myVec = GimmeAVec();
-
-  CHECK(myVec.x == Approx(1.f));
-  CHECK(myVec.y == Approx(1.f));
-  CHECK(myVec.z == Approx(1.f));
+  CHECK(vec == Vector3{});
 }
 
 TEST_CASE("Vector can calcualte its 2D size") {
-  Vector myVec{0.f, 0.f, 0.f};
-  Vector myVec2{10.f, 10.f, -10.f};
-  Vector myVec3{-10.f, -10.f, 10.f};
-  Vector myVec4{1337.f, 69.f, 80085.f};
-  CHECK(myVec.Length2D() == 0.f);
-  CHECK(myVec2.Length2D() == Approx(14.142135623730951f));
-  CHECK(myVec3.Length2D() == Approx(14.142135623730951f));
-  CHECK(myVec4.Length2D() == Approx(1338.779294730838f));
+  Vector3 myVec{0.f, 0.f, 0.f};
+  Vector3 myVec2{10.f, 10.f, -10.f};
+  Vector3 myVec3{-10.f, -10.f, 10.f};
+  Vector3 myVec4{1337.f, 69.f, 80085.f};
+  CHECK(myVec.length_2d() == 0.f);
+  CHECK(myVec2.length_2d() == Approx(14.142135623730951f));
+  CHECK(myVec3.length_2d() == Approx(14.142135623730951f));
+  CHECK(myVec4.length_2d() == Approx(1338.779294730838f));
 }
