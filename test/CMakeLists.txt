@@ -1,11 +1,11 @@
 set(TEST_SOURCES
 	TestMainFile.cpp
 	Utils/TestVMTManager.cpp ../include/Utils/VMTManager.h
-	Utils/TestVector.cpp ../include/Utils/Vector.h ../src/Utils/Vector.cpp
+	Utils/TestVector.cpp ../include/Utils/Vector.h
 	Utils/TestMathHelper.cpp ../include/Utils/MathHelper.h ../src/Utils/MathHelper.cpp
-	Utils/TestQAngle.cpp ../include/Utils/QAngle.h ../src/Utils/QAngle.cpp)
+	Utils/TestQAngle.cpp ../include/Utils/QAngle.h)
 
-if(WIN32)
+if(WIN32 AND FALSE)
 	set(WIN_SOURCES Managers/TestOffsetManager.cpp ../include/Managers/Offsets/OffsetManager.h ../src/Managers/Offsets/OffsetManager.cpp
 	Managers/TestHookingManager.cpp ../include/Managers/Hooking/HookingManager.h ../src/Managers/Hooking/HookingManager.cpp)
 endif()

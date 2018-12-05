@@ -6,9 +6,9 @@ namespace CodeNamePaste {
 namespace Utils {
 namespace Math {
 
-QAngle VectorAngles(const Vector& forward);
+QAngle VectorAngles(const Vector3& forward);
 
-QAngle CalcAngle(const Vector& src, const Vector& dst);
+QAngle CalcAngle(const Vector3& src, const Vector3& dst);
 }  // namespace Math
 }  // namespace Utils
 }  // namespace CodeNamePaste
