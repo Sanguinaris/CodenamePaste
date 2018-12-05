@@ -13,8 +13,9 @@ namespace Interfaces {
 enum class InterfaceNames : uint8_t {
   VClient018,
   VClientEntityList003,
-  VEngineClient,
+  VEngineClient014,
   VMaterialSystem080,
+  VClientMode,
   Size
 };
 
@@ -36,7 +37,7 @@ class InterfaceManager : public IManager {
 
  public:
   template <typename T, typename F>
-  T* GetInterface(F func) {
+  T* GetInterface(F func) const {
     return reinterpret_cast<T*>(
         ifaceAddys[static_cast<uint8_t>(GetEnumFromString(func))]);
   }
@@ -52,9 +53,11 @@ class InterfaceManager : public IManager {
     if (name == "VClientEntityList")
       return InterfaceNames::VClientEntityList003;
     if (name == "VEngineClient")
-      return InterfaceNames::VEngineClient;
+      return InterfaceNames::VEngineClient014;
     if (name == "VMaterialSystem")
       return InterfaceNames::VMaterialSystem080;
+	if (name == "VClientMode")
+		return InterfaceNames::VClientMode;
     return InterfaceNames::Size;
   }
 

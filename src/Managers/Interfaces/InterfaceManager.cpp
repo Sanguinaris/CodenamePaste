@@ -28,9 +28,12 @@ void InterfaceManager::DoInit() {
   {
     AutoNum* ifaceFn = reinterpret_cast<AutoNum*>(
         GetProcAddress(GetModuleHandleA("engine.dll"), "CreateInterface"));
-    ifaceAddys[static_cast<uint8_t>(InterfaceNames::VEngineClient)] =
+    ifaceAddys[static_cast<uint8_t>(InterfaceNames::VEngineClient014)] =
         GetInterface(ifaceFn, "VEngineClient014");
   }
+
+  ifaceAddys[static_cast<uint8_t>(InterfaceNames::VClientMode)] =
+	  **reinterpret_cast<AutoNum***>((*reinterpret_cast<uint8_t***>(ifaceAddys[static_cast<uint8_t>(InterfaceNames::VClient018)]))[10] + 5);
 
   for (auto i = 0; i < static_cast<uint8_t>(InterfaceNames::Size); ++i)
     if (!ifaceAddys[i])

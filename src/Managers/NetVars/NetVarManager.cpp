@@ -1,6 +1,8 @@
 #include "Managers/NetVars/NetvarManager.h"
 #include "Interfaces/VClient018.h"
 
+#include "Classes/CBaseEntity.h"
+
 #include <string_view>
 
 using namespace CodeNamePaste::Managers::NetVars;
@@ -8,7 +10,9 @@ using namespace CodeNamePaste::Managers::NetVars;
 using namespace CodeNamePaste;
 
 NetVarManager::NetVarManager(Managers::Interfaces::InterfaceManager& ifaceMgr)
-    : ifaceMgr{ifaceMgr} {}
+    : ifaceMgr{ifaceMgr} {
+  Classes::CBaseEntity::Netvars = this;
+}
 
 void NetVarManager::DoInit() {
   tables.clear();
