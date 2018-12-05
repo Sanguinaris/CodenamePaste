@@ -8,8 +8,17 @@
 #include <string_view>
 #include <unordered_map>
 #include <utility>
+#include <memory>
 
 #include "Managers/IManager.h"
+
+#include "Managers/Offsets/OffsetManager.h"
+#include "Managers/Interfaces/InterfaceManager.h"
+
+#include "Interfaces/VClientMode.h"
+#include "Utils/VMTManager.h"
+
+#include "Hooks/hkCreateMove.h"
 
 namespace CodeNamePaste {
 namespace Managers {
@@ -22,8 +31,13 @@ enum class HookNames { OnTick, CreateMove, Size };
   inst.UnRegisterCallback([] { return name; }, clbk)
 
 class HookingManager : public IManager {
+	friend bool(__fastcall CodeNamePaste::Hooks::hkCreateMove)(void*, void*, float, Classes::CUserCmd*);
+
  public:
   using CallbackFn = void(void*);
+
+public:
+	HookingManager(const Interfaces::InterfaceManager&, const Offsets::OffsetManager&);
 
  public:
   void DoInit() override;
@@ -31,7 +45,6 @@ class HookingManager : public IManager {
   bool DoShutdown() override;
 
  public:
-  // TODO make callback registering constexpr
   template <typename F>
   void* RegisterCallback(F func, std::function<CallbackFn>&& clbk) {
     std::unique_lock<std::shared_mutex> lock{mutex_};
@@ -75,9 +88,14 @@ class HookingManager : public IManager {
   }
 
  private:
+	 std::unique_ptr<Utils::VMTManager<CodeNamePaste::Interfaces::VClientMode>> ClientMode;
   std::unordered_map<HookNames, std::list<std::function<void(void*)>>>
       funcCallbacks{};
   std::shared_mutex mutex_;
+
+private:
+	const Interfaces::InterfaceManager& ifaceMgr;
+	const Offsets::OffsetManager& offyMgr;
 };
 }  // namespace Hooks
 }  // namespace Managers

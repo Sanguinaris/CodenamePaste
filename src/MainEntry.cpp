@@ -1,19 +1,4 @@
-#include <Windows.h>
-
-#include "Managers/Hooking/HookingManager.h"
-#include "Managers/Interfaces/InterfaceManager.h"
-#include "Managers/Modules/ModuleManager.h"
-#include "Managers/NetVars/NetvarManager.h"
-#include "Managers/Offsets/OffsetManager.h"
-
-#include "Classes/CBaseEntity.h"
-#include "Modules/AntiFlash.h"
-
-#include <chrono>
-#include <thread>
-#include <utility>
-
-using namespace std::chrono_literals;
+#include "Hack.h"
 
 // Inject injection handler here trigger page fault initialize us. unlink us.
 // return execution
@@ -21,39 +6,13 @@ using namespace std::chrono_literals;
 using namespace CodeNamePaste;
 
 HANDLE threadHandle;
-bool ShouldRun = true;
+Hack hack{};
 
 DWORD WINAPI OffloadThread(LPVOID mod) {
-  Managers::Interfaces::InterfaceManager ifaceMgr{};
-  Managers::NetVars::NetVarManager netMgr{ifaceMgr};
-  Managers::Offsets::OffsetManager offsetMgr{netMgr};
-  Managers::Hooks::HookingManager hookMgr{};
-  Managers::Modules::ModuleManager modMgr{ifaceMgr, netMgr, offsetMgr, hookMgr};
 
-  Classes::CBaseEntity::Netvars = &netMgr;
+  while (hack.Run());
 
-  modMgr.RegisterModule(std::make_unique<Modules::AntiFlash>());
-
-  ifaceMgr.DoInit();
-  netMgr.DoInit();
-  offsetMgr.DoInit();
-  hookMgr.DoInit();
-  modMgr.DoInit();
-
-  while (ShouldRun && (GetAsyncKeyState(VK_F10) & 1) != 1) {
-    ifaceMgr.DoTick();
-    netMgr.DoTick();
-    offsetMgr.DoTick();
-    hookMgr.DoTick();
-    modMgr.DoTick();
-    std::this_thread::sleep_for(50ms);
-  }
-
-  modMgr.DoShutdown();
-  hookMgr.DoShutdown();
-  offsetMgr.DoShutdown();
-  netMgr.DoShutdown();
-  ifaceMgr.DoShutdown();
+  hack.Shutdown();
 
   FreeLibraryAndExitThread(static_cast<HMODULE>(mod), 0);
   return TRUE;
@@ -67,7 +26,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID) {
           CreateThread(nullptr, 0, &OffloadThread, hinstDLL, 0, nullptr);
       break;
     case DLL_PROCESS_DETACH:
-      ShouldRun = false;
+      hack.Unload();
       WaitForSingleObject(threadHandle, 200);
       break;
   }
