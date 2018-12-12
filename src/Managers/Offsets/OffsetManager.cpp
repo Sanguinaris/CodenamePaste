@@ -28,11 +28,11 @@ void OffsetManager::DoInit() {
       reinterpret_cast<AutoNum>(FindPatternWrap(
           (*this), uint32_t, static_cast<uint8_t*>(modInfo.lpBaseOfDll),
           static_cast<uint8_t*>(modInfo.lpBaseOfDll) + modInfo.SizeOfImage,
-          "A3 ? ? ? ? C7 05 ? ? ? ? ? ? ? ? E8 ? ? ? ? 59 C3 6A"));
+          "8D 34 85 ? ? ? ? 89 15 ? ? ? ? 8B 41 08 8B 48 04 83 F9 FF"));
   addrOffsets[static_cast<uint8_t>(OffsetNames::LocalPlayer)] =
       (*reinterpret_cast<AutoNum*>(
-          addrOffsets[static_cast<uint8_t>(OffsetNames::LocalPlayer)] + 1)) +
-      0x10;
+          addrOffsets[static_cast<uint8_t>(OffsetNames::LocalPlayer)] + 0x03)) +
+      0x04;
 }
 
 void OffsetManager::DoTick() {}

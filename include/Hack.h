@@ -21,6 +21,9 @@ namespace CodeNamePaste {
 		bool UncleanUnload = false;
 
 	private:
+		FILE* pNewStdOut = nullptr;
+
+	private:
 		  Managers::Interfaces::InterfaceManager ifaceMgr{};
 		  Managers::NetVars::NetVarManager netMgr{ifaceMgr};
 		  Managers::Offsets::OffsetManager offsetMgr{netMgr};

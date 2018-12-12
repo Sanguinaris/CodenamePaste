@@ -7,8 +7,8 @@ namespace CodeNamePaste {
 namespace Interfaces {
 class VClient018 {
  public:
-  VFUNCTION(8, Classes::ClientClass*(__thiscall*)(), GetAllClasses)
-  VFUNCTION(13, void(__thiscall*)(const char*), HudText)
+  VFUNCTION(8, Classes::ClientClass*(__fastcall*)(void*, void*), GetAllClasses)
+  VFUNCTION(13, void(__fastcall*)(void*, void*, const char*), HudText)
   //  36   36 CHLClient::FrameStageNotify(ClientFrameStage_t)
   //  64   64 CHLClient::GetScreenWidth(void)
   //  65   65 CHLClient::GetScreenHeight(void)
