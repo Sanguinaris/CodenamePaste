@@ -26,7 +26,7 @@ enum class InterfaceNames : uint8_t {
   template <typename... Args>                                                  \
   auto name(Args&&... args) {                                                  \
     return reinterpret_cast<fnPtrType>(                                        \
-        (*reinterpret_cast<char***>(this))[idx])(std::forward<Args>(args)...); \
+        (*reinterpret_cast<char***>(this))[idx])(this, nullptr, std::forward<Args>(args)...); \
   }
 
 class InterfaceManager : public IManager {

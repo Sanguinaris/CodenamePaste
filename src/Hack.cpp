@@ -11,6 +11,10 @@ using namespace CodeNamePaste;
 
 Hack::Hack()
 {
+	AllocConsole();
+	AttachConsole(GetCurrentProcessId());
+	freopen_s(&pNewStdOut, "CON", "w", stdout);
+
 	try {
 		ifaceMgr.DoInit();
 		netMgr.DoInit();
@@ -48,6 +52,9 @@ void Hack::Shutdown()
   offsetMgr.DoShutdown();
   netMgr.DoShutdown();
   ifaceMgr.DoShutdown();
+
+  fclose(pNewStdOut);
+  FreeConsole();
 }
 
 void Hack::Unload()

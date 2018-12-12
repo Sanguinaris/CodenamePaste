@@ -26,6 +26,7 @@ bool BunnyHop::DoShutdown()
 
 void BunnyHop::DoBunnyHop(Classes::CUserCmd* userCmd)
 {
+	printf("AntiFlash: Player (%i) flag: %x\n", pLocalPlayer->m_iHealth(), pLocalPlayer->m_fFlags());
 	if(!(pLocalPlayer->m_fFlags() & Classes::PlayerFlags::FL_ONGROUND))
 			  if(userCmd->buttons &IN_JUMP)
 				userCmd->buttons &= ~IN_JUMP;

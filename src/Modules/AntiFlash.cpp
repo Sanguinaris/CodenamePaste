@@ -11,7 +11,7 @@ void AntiFlash::DoInit() {
   engineClient = GetInterfaceWrap((ifaceMgr->get()), Interfaces::IClientEngine, "VEngineClient");
   OnTickClbk =
       RegisterCallbackWrap(hookMgr->get(), "OnTick", [this](const auto) {
-        if (engineClient->IsConnected() && pLocalPlayer)
+        if (engineClient->IsConnected() && engineClient->IsInGame())
           pLocalPlayer->m_flFlashDuration() = 0;
       });
 }
