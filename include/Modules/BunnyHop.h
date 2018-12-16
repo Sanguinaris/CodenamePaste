@@ -11,14 +11,13 @@ class BunnyHop : public Managers::Modules::Module {
   BunnyHop();
 
  private:
-  void DoInit() override;
   bool DoShutdown() override;
 
  private:
   void DoBunnyHop(Classes::CUserCmd*);
 
  private:
-  void* OnCreateMoveClbk;
+  const void* OnCreateMoveClbk;
 
  private:
   Classes::CBaseEntity* pLocalPlayer = nullptr;

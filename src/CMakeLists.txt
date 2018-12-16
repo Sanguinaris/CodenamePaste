@@ -29,7 +29,8 @@ set(CSGO_CLASSES	../include/Classes/NetVarStuff/ClientClass.h
 					../include/Classes/NetVarStuff/RecvProp.h
 					../include/Classes/NetVarStuff/RecvTable.h
 					../include/Classes/CUserCmd.h
-					../include/Classes/CBaseEntity.h Classes/CBaseEntity.cpp)
+					../include/Classes/CBaseEntity.h Classes/CBaseEntity.cpp
+					../include/Classes/CGlobalVars.h)
 
 set(CSGO_HOOKS		Hooks/hkCreateMove.cpp ../include/Hooks/hkCreateMove.h
 					Hooks/hkFrameStageNotify.cpp ../include/Hooks/hkFrameStageNotify.h)

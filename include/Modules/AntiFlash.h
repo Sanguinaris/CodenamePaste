@@ -12,11 +12,10 @@ class AntiFlash : public Managers::Modules::Module {
   AntiFlash();
 
  private:
-  void DoInit() override;
   bool DoShutdown() override;
 
  private:
-  void* OnTickClbk;
+  const void* OnTickClbk;
 
  private:
   Classes::CBaseEntity* pLocalPlayer = nullptr;

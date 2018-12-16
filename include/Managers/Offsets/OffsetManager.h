@@ -45,6 +45,7 @@ enum class OffsetNames : uint8_t {
 };
 
 #define GetOffsetWrap(inst, name) inst.GetOffset([] { return name; })
+#define GetOffsetWrapP(inst, type, name) inst.GetOffsetP<type>([] { return name; })
 #define FindPatternWrap(inst, ret, start, end, pattern) \
   inst.FindPattern<ret>(start, end, [] { return pattern; })
 
@@ -63,6 +64,11 @@ class OffsetManager : public IManager {
   template <typename F>
   const AutoNum GetOffset(F func) const {
     return addrOffsets[static_cast<uint8_t>(GetEnumFromString(func))];
+  }
+
+  template <typename T, typename F>
+  T* GetOffsetP(F func) const {
+	  return *reinterpret_cast<T**>(const_cast<AutoNum*>(&addrOffsets[static_cast<uint8_t>(GetEnumFromString(func))]));
   }
 
   template <typename ret, typename F>
@@ -104,6 +110,8 @@ class OffsetManager : public IManager {
       return OffsetNames::ClientMode;
     if (name == "m_bDormant")
       return OffsetNames::NetVars_mBDormant;
+	if (name == "GlobalVars")
+	  return OffsetNames::GlobalVars;
     return OffsetNames::Size;
   }
 

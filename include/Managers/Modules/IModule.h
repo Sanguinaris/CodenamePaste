@@ -1,10 +1,5 @@
 #pragma once
 
-#include "Managers/Hooking/HookingManager.h"
-#include "Managers/Interfaces/InterfaceManager.h"
-#include "Managers/NetVars/NetvarManager.h"
-#include "Managers/Offsets/OffsetManager.h"
-
 #include <string>
 
 namespace CodeNamePaste::Managers {
@@ -14,11 +9,6 @@ class IModule {
   virtual ~IModule() = default;
 
  public:
-  virtual void DoInit() = 0;
-  virtual void DoInit(const Interfaces::InterfaceManager&,
-                      const NetVars::NetVarManager&,
-                      const Offsets::OffsetManager&,
-                      Hooks::HookingManager&) = 0;
   virtual bool DoShutdown() = 0;
 
  public:
