@@ -9,11 +9,16 @@ Managers::Hooks::HookingManager::HookingManager(const Interfaces::InterfaceManag
 
 void Managers::Hooks::HookingManager::DoInit() {
 	ClientMode = std::make_unique<Utils::VMTManager<CodeNamePaste::Interfaces::VClientMode>>(GetInterfaceWrap(ifaceMgr, CodeNamePaste::Interfaces::VClientMode, "VClientMode"));
+	BaseClientDll = std::make_unique<Utils::VMTManager<CodeNamePaste::Interfaces::IBaseClientDLL>>(GetInterfaceWrap(ifaceMgr, CodeNamePaste::Interfaces::IBaseClientDLL, "VClient"));
 
 	CodeNamePaste::Hooks::hkManager = this;
 	if (!ClientMode->HookIndex(24, &CodeNamePaste::Hooks::hkCreateMove))
 	{
 		throw std::runtime_error{ "CreateMove failed to Hook" };
+	}
+	if (!BaseClientDll->HookIndex(37, &CodeNamePaste::Hooks::hkFrameStageNotify))
+	{
+		throw std::runtime_error{ "FrameStageNotify failed to Hook" };
 	}
 }
 

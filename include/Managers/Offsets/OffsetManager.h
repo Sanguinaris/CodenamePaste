@@ -39,6 +39,8 @@ enum class OffsetNames : uint8_t {
   GlobalVars,
   ClientMode,
 
+  NetVars_mBDormant,
+
   Size
 };
 
@@ -100,6 +102,8 @@ class OffsetManager : public IManager {
       return OffsetNames::GlobalVars;
     if (name == "ClientMode")
       return OffsetNames::ClientMode;
+	if (name == "m_bDormant")
+		return OffsetNames::NetVars_mBDormant;
     return OffsetNames::Size;
   }
 
