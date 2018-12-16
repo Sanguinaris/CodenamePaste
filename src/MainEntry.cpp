@@ -9,7 +9,6 @@ HANDLE threadHandle;
 Hack hack{};
 
 DWORD WINAPI OffloadThread(LPVOID mod) {
-
   while (hack.Run());
 
   hack.Shutdown();

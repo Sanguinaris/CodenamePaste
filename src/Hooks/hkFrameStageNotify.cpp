@@ -7,8 +7,6 @@ namespace CodeNamePaste {
 	namespace Hooks {
 		void __fastcall hkFrameStageNotify(void* ecx, void* edx, Classes::ClientFrameStage_t stage)
 		{
-
-
 			static_cast<CodeNamePaste::Managers::Hooks::HookingManager*>(hkManager)->BaseClientDll->GetOriginal()->FrameStageNotify(stage);
 
 			{
@@ -17,8 +15,6 @@ namespace CodeNamePaste {
 					clbk(&stage);
 				}
 			}
-
-
 		}
 	}
 }
