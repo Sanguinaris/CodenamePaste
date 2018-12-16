@@ -25,10 +25,5 @@ void Radar::DoRadar(Classes::ClientFrameStage_t stage)
 	{
 		void* ent = nullptr;
 		//auto ent = pEntList->GetClientEntity(i);
-		if (ent)
-		{
-
-		}
-		
 	}
 }
