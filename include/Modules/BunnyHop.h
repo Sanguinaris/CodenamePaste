@@ -6,22 +6,22 @@
 
 namespace CodeNamePaste {
 namespace Modules {
-	class BunnyHop : public Managers::Modules::Module {
-	public:
-		BunnyHop();
+class BunnyHop : public Managers::Modules::Module {
+ public:
+  BunnyHop();
 
-	private:
-		void DoInit() override;
-		bool DoShutdown() override;
+ private:
+  void DoInit() override;
+  bool DoShutdown() override;
 
-	private:
-		void DoBunnyHop(Classes::CUserCmd*);
+ private:
+  void DoBunnyHop(Classes::CUserCmd*);
 
-	private:
-		void* OnCreateMoveClbk;
+ private:
+  void* OnCreateMoveClbk;
 
-	private:
-		Classes::CBaseEntity* pLocalPlayer = nullptr;
-	};
-}
-}
+ private:
+  Classes::CBaseEntity* pLocalPlayer = nullptr;
+};
+}  // namespace Modules
+}  // namespace CodeNamePaste

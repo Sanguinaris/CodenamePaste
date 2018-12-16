@@ -8,7 +8,8 @@ AntiFlash::AntiFlash() : Module::Module{"AntiFlash"} {}
 void AntiFlash::DoInit() {
   pLocalPlayer = reinterpret_cast<Classes::CBaseEntity*>(
       GetOffsetWrap(offyMgr->get(), "LocalPlayer"));
-  engineClient = GetInterfaceWrap((ifaceMgr->get()), Interfaces::IClientEngine, "VEngineClient");
+  engineClient = GetInterfaceWrap((ifaceMgr->get()), Interfaces::IClientEngine,
+                                  "VEngineClient");
   OnTickClbk =
       RegisterCallbackWrap(hookMgr->get(), "OnTick", [this](const auto) {
         if (engineClient->IsConnected() && engineClient->IsInGame())

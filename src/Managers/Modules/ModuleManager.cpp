@@ -12,10 +12,10 @@ ModuleManager::ModuleManager(const Interfaces::InterfaceManager& ifaceMgr,
                              const Offsets::OffsetManager& offyMgr,
                              Hooks::HookingManager& hookMgr)
     : ifaceMgr{ifaceMgr}, netMgr{netMgr}, offyMgr{offyMgr}, hookMgr{hookMgr} {
-		RegisterModule(std::make_unique<CodeNamePaste::Modules::AntiFlash>());
-		RegisterModule(std::make_unique<CodeNamePaste::Modules::BunnyHop>());
-		RegisterModule(std::make_unique<CodeNamePaste::Modules::Radar>());
-	}
+  RegisterModule(std::make_unique<CodeNamePaste::Modules::AntiFlash>());
+  RegisterModule(std::make_unique<CodeNamePaste::Modules::BunnyHop>());
+  RegisterModule(std::make_unique<CodeNamePaste::Modules::Radar>());
+}
 
 void ModuleManager::DoInit() {
   for (const auto& mod : modules)

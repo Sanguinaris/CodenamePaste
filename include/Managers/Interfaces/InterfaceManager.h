@@ -22,11 +22,11 @@ enum class InterfaceNames : uint8_t {
 #define GetInterfaceWrap(inst, type, name) \
   inst.GetInterface<type>([] { return name; })
 
-#define VFUNCTION(idx, fnPtrType, name)                                        \
-  template <typename... Args>                                                  \
-  auto name(Args&&... args) {                                                  \
-    return reinterpret_cast<fnPtrType>(                                        \
-        (*reinterpret_cast<char***>(this))[idx])(this, nullptr, std::forward<Args>(args)...); \
+#define VFUNCTION(idx, fnPtrType, name)                             \
+  template <typename... Args>                                       \
+  auto name(Args&&... args) {                                       \
+    return reinterpret_cast<fnPtrType>((*reinterpret_cast<char***>( \
+        this))[idx])(this, nullptr, std::forward<Args>(args)...);   \
   }
 
 class InterfaceManager : public IManager {
@@ -56,8 +56,8 @@ class InterfaceManager : public IManager {
       return InterfaceNames::VEngineClient014;
     if (name == "VMaterialSystem")
       return InterfaceNames::VMaterialSystem080;
-	if (name == "VClientMode")
-		return InterfaceNames::VClientMode;
+    if (name == "VClientMode")
+      return InterfaceNames::VClientMode;
     return InterfaceNames::Size;
   }
 

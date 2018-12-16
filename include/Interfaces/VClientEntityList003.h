@@ -4,13 +4,14 @@
 #include "Managers/Interfaces/InterfaceManager.h"
 
 namespace CodeNamePaste {
-	namespace Interfaces {
-		class VClientEntityList003 {
-		public:
-			VFUNCTION(3, Classes::CBaseEntity*(__fastcall *)(void*, void*, int idx), GetClientEntity);
+namespace Interfaces {
+class VClientEntityList003 {
+ public:
+  VFUNCTION(3,
+            Classes::CBaseEntity*(__fastcall*)(void*, void*, int idx),
+            GetClientEntity);
+};
 
-		};
-
-		using IClientEntityList = VClientEntityList003;
-	}
-}
+using IClientEntityList = VClientEntityList003;
+}  // namespace Interfaces
+}  // namespace CodeNamePaste

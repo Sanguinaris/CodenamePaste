@@ -2,9 +2,11 @@
 #include "Managers/IManager.h"
 
 namespace CodeNamePaste {
-	namespace Hooks {
-		extern Managers::IManager* hkManager;
+namespace Hooks {
+extern Managers::IManager* hkManager;
 
-		void __fastcall hkFrameStageNotify(void* ecx, void* edx, Classes::ClientFrameStage_t stage);
-	}
-}
+void __fastcall hkFrameStageNotify(void* ecx,
+                                   void* edx,
+                                   Classes::ClientFrameStage_t stage);
+}  // namespace Hooks
+}  // namespace CodeNamePaste

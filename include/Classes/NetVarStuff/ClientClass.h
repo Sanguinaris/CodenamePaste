@@ -6,7 +6,8 @@ namespace CodeNamePaste::Classes {
 class ClientClass {
  public:
   void* m_pCreateFn;       // CreateClientClassFn		m_pCreateFn;
-  void* m_pCreateEventFn;  // CreateEventFn				m_pCreateEventFn;
+  void* m_pCreateEventFn;  // CreateEventFn
+                           // m_pCreateEventFn;
                            // // Only called for event objects.
   char* m_pNetworkName;
   RecvTable* m_pRecvTable;
