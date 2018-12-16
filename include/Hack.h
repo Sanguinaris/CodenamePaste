@@ -7,27 +7,27 @@
 #include "Managers/Offsets/OffsetManager.h"
 
 namespace CodeNamePaste {
-	class Hack {
-	public:
-		Hack();
+class Hack {
+ public:
+  Hack();
 
-	public:
-		bool Run();
-		void Shutdown();
-		void Unload();	// Should find a better name
+ public:
+  bool Run();
+  void Shutdown();
+  void Unload();  // Should find a better name
 
-	private:
-		bool ShouldRun = true;
-		bool UncleanUnload = false;
+ private:
+  bool ShouldRun = true;
+  bool UncleanUnload = false;
 
-	private:
-		FILE* pNewStdOut = nullptr;
+ private:
+  FILE* pNewStdOut = nullptr;
 
-	private:
-		  Managers::Interfaces::InterfaceManager ifaceMgr{};
-		  Managers::NetVars::NetVarManager netMgr{ifaceMgr};
-		  Managers::Offsets::OffsetManager offsetMgr{netMgr};
-		  Managers::Hooks::HookingManager hookMgr{ifaceMgr, offsetMgr};
-		  Managers::Modules::ModuleManager modMgr{ifaceMgr, netMgr, offsetMgr, hookMgr};
-	};
-}
+ private:
+  Managers::Interfaces::InterfaceManager ifaceMgr{};
+  Managers::NetVars::NetVarManager netMgr{ifaceMgr};
+  Managers::Offsets::OffsetManager offsetMgr{netMgr};
+  Managers::Hooks::HookingManager hookMgr{ifaceMgr, offsetMgr};
+  Managers::Modules::ModuleManager modMgr{ifaceMgr, netMgr, offsetMgr, hookMgr};
+};
+}  // namespace CodeNamePaste

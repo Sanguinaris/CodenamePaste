@@ -1,9 +1,9 @@
 #pragma once
-#include "Utils/Vector.h"
 #include "Utils/QAngle.h"
+#include "Utils/Vector.h"
 
 namespace CodeNamePaste {
-	namespace Classes {
+namespace Classes {
 
 #define IN_ATTACK (1 << 0)
 #define IN_JUMP (1 << 1)
@@ -32,25 +32,25 @@ namespace CodeNamePaste {
 #define IN_GRENADE2 (1 << 24)
 #define IN_LOOKSPIN (1 << 25)
 
-		struct CUserCmd {
-			virtual ~CUserCmd() = default;
+struct CUserCmd {
+  virtual ~CUserCmd() = default;
 
-			int command_number;
-			int tick_count;
-			Utils::QAngle viewangles;
-			Utils::Vector3 aimdirection;
-			float forwardmove;
-			float sidemove;
-			float upmove;
-			int buttons;
-			uint8_t impulse;
-			int weaponselect;
-			int weaponsubtype;
-			int random_seed;
-			short mousedx;
-			short mousedy;
-			bool hasbeenpredicted;
-			char _[24];
-		};
-	}
-}
+  int command_number;
+  int tick_count;
+  Utils::QAngle viewangles;
+  Utils::Vector3 aimdirection;
+  float forwardmove;
+  float sidemove;
+  float upmove;
+  int buttons;
+  uint8_t impulse;
+  int weaponselect;
+  int weaponsubtype;
+  int random_seed;
+  short mousedx;
+  short mousedy;
+  bool hasbeenpredicted;
+  char _[24];
+};
+}  // namespace Classes
+}  // namespace CodeNamePaste

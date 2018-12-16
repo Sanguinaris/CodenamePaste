@@ -4,25 +4,26 @@
 #include "Managers/Interfaces/InterfaceManager.h"
 
 namespace CodeNamePaste {
-	namespace Classes {
-		enum ClientFrameStage_t
-{
-    FRAME_UNDEFINED = -1,
-    FRAME_START,
-    FRAME_NET_UPDATE_START,
-    FRAME_NET_UPDATE_POSTDATAUPDATE_START,
-    FRAME_NET_UPDATE_POSTDATAUPDATE_END,
-    FRAME_NET_UPDATE_END,
-    FRAME_RENDER_START,
-    FRAME_RENDER_END
+namespace Classes {
+enum ClientFrameStage_t {
+  FRAME_UNDEFINED = -1,
+  FRAME_START,
+  FRAME_NET_UPDATE_START,
+  FRAME_NET_UPDATE_POSTDATAUPDATE_START,
+  FRAME_NET_UPDATE_POSTDATAUPDATE_END,
+  FRAME_NET_UPDATE_END,
+  FRAME_RENDER_START,
+  FRAME_RENDER_END
 };
-	}
+}
 namespace Interfaces {
 class VClient018 {
  public:
-	 VFUNCTION(8, Classes::ClientClass*(__fastcall*)(void*, void*), GetAllClasses)
-	 VFUNCTION(13, void(__fastcall*)(void*, void*, const char*), HudText)
-	 VFUNCTION(37, void(__fastcall*)(void*, void*, Classes::ClientFrameStage_t), FrameStageNotify)
+  VFUNCTION(8, Classes::ClientClass*(__fastcall*)(void*, void*), GetAllClasses)
+  VFUNCTION(13, void(__fastcall*)(void*, void*, const char*), HudText)
+  VFUNCTION(37,
+            void(__fastcall*)(void*, void*, Classes::ClientFrameStage_t),
+            FrameStageNotify)
   //  36   36 CHLClient::FrameStageNotify(ClientFrameStage_t)
   //  64   64 CHLClient::GetScreenWidth(void)
   //  65   65 CHLClient::GetScreenHeight(void)

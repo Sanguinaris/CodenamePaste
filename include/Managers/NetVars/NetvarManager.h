@@ -34,8 +34,8 @@ class NetVarManager : public IManager {
 
  private:
   const AutoNum GetProperty(const Classes::RecvTable& recvTable,
-                        const std::string& propName,
-                        Classes::RecvProp** prop = nullptr) const;
+                            const std::string& propName,
+                            Classes::RecvProp** prop = nullptr) const;
 
  private:
   Interfaces::InterfaceManager& ifaceMgr;
