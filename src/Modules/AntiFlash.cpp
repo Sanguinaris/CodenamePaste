@@ -3,9 +3,7 @@
 using namespace CodeNamePaste;
 using namespace Modules;
 
-AntiFlash::AntiFlash() : Module::Module{"AntiFlash"} {}
-
-void AntiFlash::DoInit() {
+AntiFlash::AntiFlash() : Module::Module{"AntiFlash"} {
   pLocalPlayer = reinterpret_cast<Classes::CBaseEntity*>(
       GetOffsetWrap(offyMgr->get(), "LocalPlayer"));
   engineClient = GetInterfaceWrap((ifaceMgr->get()), Interfaces::IClientEngine,

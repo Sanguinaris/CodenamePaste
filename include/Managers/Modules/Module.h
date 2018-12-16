@@ -1,19 +1,22 @@
 #pragma once
-#include <optional>
 #include "IModule.h"
+
+#include "Managers/Hooking/HookingManager.h"
+#include "Managers/Interfaces/InterfaceManager.h"
+#include "Managers/NetVars/NetvarManager.h"
+#include "Managers/Offsets/OffsetManager.h"
+
+#include <optional>
 
 namespace CodeNamePaste::Managers {
 namespace Modules {
+	class ModuleManager;
 class Module : public IModule {
+	friend ModuleManager;
  public:
   Module(std::string&& name);
 
  public:
-  void DoInit() override;
-  void DoInit(const Interfaces::InterfaceManager&,
-              const NetVars::NetVarManager&,
-              const Offsets::OffsetManager&,
-              Hooks::HookingManager&) override;
   bool DoShutdown() override;
 
  public:
@@ -28,11 +31,11 @@ class Module : public IModule {
   bool moduleState = false;
 
  protected:
-  std::optional<std::reference_wrapper<const Interfaces::InterfaceManager>>
+  static std::optional<std::reference_wrapper<const Interfaces::InterfaceManager>>
       ifaceMgr;
-  std::optional<std::reference_wrapper<const NetVars::NetVarManager>> netMgr;
-  std::optional<std::reference_wrapper<const Offsets::OffsetManager>> offyMgr;
-  std::optional<std::reference_wrapper<Hooks::HookingManager>> hookMgr;
+  static std::optional<std::reference_wrapper<const NetVars::NetVarManager>> netMgr;
+  static std::optional<std::reference_wrapper<const Offsets::OffsetManager>> offyMgr;
+  static std::optional<std::reference_wrapper<Hooks::HookingManager>> hookMgr;
 
  private:
   const std::string moduleName;

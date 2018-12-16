@@ -6,10 +6,8 @@
 using namespace CodeNamePaste;
 using namespace Modules;
 
-BunnyHop::BunnyHop() : Module{"Bunny Hop"} {}
-
-void BunnyHop::DoInit() {
-  pLocalPlayer = reinterpret_cast<Classes::CBaseEntity*>(
+BunnyHop::BunnyHop() : Module{"Bunny Hop"} {
+ pLocalPlayer = reinterpret_cast<Classes::CBaseEntity*>(
       GetOffsetWrap(offyMgr->get(), "LocalPlayer"));
   OnCreateMoveClbk =
       RegisterCallbackWrap(hookMgr->get(), "CreateMove", [this](auto pUserCmd) {

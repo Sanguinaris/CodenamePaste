@@ -3,21 +3,13 @@
 using namespace CodeNamePaste::Managers;
 using namespace Modules;
 
+std::optional<std::reference_wrapper<const Interfaces::InterfaceManager>>
+      CodeNamePaste::Managers::Modules::Module::ifaceMgr;
+std::optional<std::reference_wrapper<const NetVars::NetVarManager>> CodeNamePaste::Managers::Modules::Module::netMgr;
+std::optional<std::reference_wrapper<const Offsets::OffsetManager>> CodeNamePaste::Managers::Modules::Module::offyMgr;
+std::optional<std::reference_wrapper<Hooks::HookingManager>> CodeNamePaste::Managers::Modules::Module::hookMgr;
+
 Module::Module(std::string&& name) : moduleName{std::move(name)} {}
-
-void Module::DoInit() {}
-
-void Module::DoInit(const Interfaces::InterfaceManager& ifaceMgr,
-                    const NetVars::NetVarManager& netMgr,
-                    const Offsets::OffsetManager& offMgr,
-                    Hooks::HookingManager& hookMgr) {
-  this->ifaceMgr = ifaceMgr;
-  this->netMgr = netMgr;
-  this->offyMgr = offMgr;
-  this->hookMgr = hookMgr;
-
-  DoInit();
-}
 
 bool Module::DoShutdown() {
   return true;

@@ -5,6 +5,8 @@
 #include "Interfaces/VClient018.h"
 #include "Interfaces/VClientEntityList003.h"
 
+#include "Classes/CGlobalVars.h"
+
 namespace CodeNamePaste {
 namespace Modules {
 class Radar : public Managers::Modules::Module {
@@ -12,17 +14,17 @@ class Radar : public Managers::Modules::Module {
   Radar();
 
  private:
-  void DoInit() override;
   bool DoShutdown() override;
 
  private:
   void DoRadar(Classes::ClientFrameStage_t stage);
 
  private:
-  void* OnFrameStageNotiftClbk;
+  const void* OnFrameStageNotiftClbk;
 
  private:
   Interfaces::IClientEntityList* pEntList = nullptr;
+  const Classes::CGlobalVars* pGlobalVars = nullptr;
 };
 }  // namespace Modules
 }  // namespace CodeNamePaste
