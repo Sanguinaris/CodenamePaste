@@ -1,5 +1,6 @@
 #pragma once
 #include "Managers/NetVars/NetvarManager.h"
+#include "Managers/Offsets/OffsetManager.h"
 
 namespace CodeNamePaste {
 namespace Classes {
@@ -42,11 +43,14 @@ namespace Classes {
 class CBaseEntity {
  public:
   static const Managers::NetVars::NetVarManager* Netvars;
+  static const Managers::Offsets::OffsetManager* Offsets;
 
  public:
-  ADD_NETVAR(int, m_iHealth, "CCSPlayer", "m_iHealth")
-  ADD_NETVAR(float, m_flFlashDuration, "CCSPlayer", "m_flFlashDuration")
-  ADD_NETVAR(PlayerFlags, m_fFlags, "CBasePlayer", "m_fFlags")
+	ADD_NETVAR(int, m_iHealth, "CCSPlayer", "m_iHealth")
+	ADD_NETVAR(float, m_flFlashDuration, "CCSPlayer", "m_flFlashDuration")
+	ADD_NETVAR(PlayerFlags, m_fFlags, "CBasePlayer", "m_fFlags")
+	ADD_NETVAR(bool, m_bSpotted, "CBaseEntity", "m_bSpotted")
+	bool& m_bDormant();
 };
 }  // namespace Classes
 }  // namespace CodeNamePaste

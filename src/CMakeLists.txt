@@ -31,10 +31,12 @@ set(CSGO_CLASSES	../include/Classes/NetVarStuff/ClientClass.h
 					../include/Classes/CUserCmd.h
 					../include/Classes/CBaseEntity.h Classes/CBaseEntity.cpp)
 
-set(CSGO_HOOKS		Hooks/hkCreateMove.cpp ../include/Hooks/hkCreateMove.h)
+set(CSGO_HOOKS		Hooks/hkCreateMove.cpp ../include/Hooks/hkCreateMove.h
+					Hooks/hkFrameStageNotify.cpp ../include/Hooks/hkFrameStageNotify.h)
 
-set(CSGO_MODULES    Modules/AntiFlash.cpp ../include/Modules/AntiFlash.h
-					Modules/BunnyHop.cpp  ../include/Modules/BunnyHop.h)
+set(CSGO_MODULES    Modules/AntiFlash.cpp	../include/Modules/AntiFlash.h
+					Modules/BunnyHop.cpp	../include/Modules/BunnyHop.h
+					Modules/Radar.cpp		../include/Modules/Radar.h)
 
 add_library(ProjectPaste SHARED ${HACK_HEADERS} ${CSGO_INTERFACES} ${CSGO_HOOKS} ${CSGO_CLASSES} ${CSGO_MODULES} ${HACK_SOURCES})
 target_compile_definitions(ProjectPaste PRIVATE WIN32_LEAN_AND_MEAN)

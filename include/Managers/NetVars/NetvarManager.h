@@ -33,7 +33,7 @@ class NetVarManager : public IManager {
       Classes::RecvProp** prop = nullptr) const;
 
  private:
-  const AutoNum GetProp(const Classes::RecvTable& recvTable,
+  const AutoNum GetProperty(const Classes::RecvTable& recvTable,
                         const std::string& propName,
                         Classes::RecvProp** prop = nullptr) const;
 

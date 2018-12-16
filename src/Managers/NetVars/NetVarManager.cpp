@@ -41,10 +41,10 @@ const CodeNamePaste::Managers::AutoNum NetVarManager::GetProperty(
   const auto recvTable = tables.find(tableName);
   if (recvTable == tables.end() || !recvTable->second)
     return 0;
-  return GetProp(*(recvTable->second), propName, prop);
+  return GetProperty(*(recvTable->second), propName, prop);
 }
 
-const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
+const CodeNamePaste::Managers::AutoNum NetVarManager::GetProperty(
     const Classes::RecvTable& recvTable,
     const std::string& propName,
     Classes::RecvProp** prop) const {
@@ -55,7 +55,7 @@ const CodeNamePaste::Managers::AutoNum NetVarManager::GetProp(
     auto recvChild = recvProp->m_pDataTable;
 
     if (recvChild && recvChild->m_nProps > 0) {
-      auto tmp = GetProp(*recvChild, propName, prop);
+      auto tmp = GetProperty(*recvChild, propName, prop);
       if (tmp)
         addOffy += recvProp->m_Offset + tmp;
     }

@@ -2,6 +2,7 @@
 
 #include "Modules/AntiFlash.h"
 #include "Modules/BunnyHop.h"
+#include "Modules/Radar.h"
 
 using namespace CodeNamePaste::Managers;
 using namespace Modules;
@@ -13,6 +14,7 @@ ModuleManager::ModuleManager(const Interfaces::InterfaceManager& ifaceMgr,
     : ifaceMgr{ifaceMgr}, netMgr{netMgr}, offyMgr{offyMgr}, hookMgr{hookMgr} {
 		RegisterModule(std::make_unique<CodeNamePaste::Modules::AntiFlash>());
 		RegisterModule(std::make_unique<CodeNamePaste::Modules::BunnyHop>());
+		RegisterModule(std::make_unique<CodeNamePaste::Modules::Radar>());
 	}
 
 void ModuleManager::DoInit() {

@@ -1,20 +1,16 @@
 #pragma once
 
-#include "Classes/CBaseHandle.h"
-#include "Classes/IEntity.h"
+#include "Classes/CBaseEntity.h"
+#include "Managers/Interfaces/InterfaceManager.h"
 
-class VClientEntityList003 {
- public:
-  virtual IClientNetworkable* GetClientNetworkable(int entnum) = 0;
-  virtual IClientNetworkable* GetClientNetworkableFromHandle(
-      CBaseHandle hEnt) = 0;
-  virtual IClientUnknown* GetClientUnknownFromHandle(CBaseHandle hEnt) = 0;
-  virtual IClientEntity* GetClientEntity(int entum) = 0;
-  virtual IClientEntity* GetClientEntityFromHandle(CBaseHandle hEnt) = 0;
-  virtual int NumberOfEntities(bool bIncludeNonNetworkable) = 0;
-  virtual int GetHighestEntityIndex() = 0;
-  virtual void SetMaxEntities(int maxents) = 0;
-  virtual int GetMaxEntities() = 0;
-};
+namespace CodeNamePaste {
+	namespace Interfaces {
+		class VClientEntityList003 {
+		public:
+			VFUNCTION(3, Classes::CBaseEntity*(__fastcall *)(void*, void*, int idx), GetClientEntity);
 
-using IClientEntityList = VClientEntityList003;
+		};
+
+		using IClientEntityList = VClientEntityList003;
+	}
+}

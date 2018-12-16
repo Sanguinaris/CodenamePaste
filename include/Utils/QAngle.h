@@ -250,7 +250,7 @@ public:
 
 		for (auto i = 0; i <= 2; i++)
 			if (angle[i] > 180.f || angle[i] < -180.f)
-				angle[i] = (angle[i] < 0.f) ? angle[i] + 360.f * round(abs(angle[i] / 360.f)) : angle[i] - 360.f * round(abs(angle[i] / 360.f));
+				angle[i] = (angle[i] < 0.f) ? angle[i] + 360.f * round(std::abs(angle[i] / 360.f)) : angle[i] - 360.f * round(std::abs(angle[i] / 360.f));
 	}
 
 	auto normalized() const -> QAngle

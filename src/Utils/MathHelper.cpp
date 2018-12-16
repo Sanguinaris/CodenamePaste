@@ -19,6 +19,7 @@ QAngle Math::VectorAngles(const Vector3& forward) {
                         static_cast<float>(M_PI));
     retAngle.y =
         (atan2f(forward.y, forward.x) * 180 / static_cast<float>(M_PI));
+
     if (retAngle.y < 90)
       retAngle.y += 180;
     else if (retAngle.y == 90)
